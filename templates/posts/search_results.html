@@ -1,0 +1,18 @@
+{% extends 'layouts/index.html' %}
+
+
+{% block search_results %}
+    {% if query %}
+        <h3>Results Search Keywords: "{{ query }}"</h3>
+        <ul>
+            {% for post in results %}
+                <li><a href="{% url 'posts:detail-post' post.pk %}">{{ post.name }}</a></li>
+            {% empty %}
+                <li>Không tìm thấy bài viết nào phù hợp.</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Không có từ khóa tìm kiếm nào được nhập.</p>
+    {% endif %}
+{% endblock search_results %}
+    

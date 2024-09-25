@@ -1,0 +1,54 @@
+.container-cus{
+    margin-left: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(max(50px,100%/4), 1fr));
+}
+.content{
+    position: relative;
+    /* background-color: red; */
+    width: 250px;
+    height: 400px;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+    margin: 10px;
+}
+.action{
+    position: absolute;
+    bottom: 5px;
+    margin-left:7%;
+}
+.hotline{
+    position: fixed;
+    margin-left: 85%;
+    bottom: 10px;
+}
+.image>img{
+    width: 100%;
+    height: 200px;
+}
+.image{
+    width: 100%;
+    height: 200px;
+}
+
+.img-detail{
+    width: 600px;
+    max-width:100%;  
+    height: 400px;
+    object-fit: cover;
+    object-fit: contain;
+}
+.img-detail > img{
+    height: 400px;
+}
+.description{
+    position: relative;
+    height: 400px;
+    vertical-align: middle;
+    display: table-cell;
+}
+.clickbuy{
+    position: absolute;
+    bottom: 5px;
+}

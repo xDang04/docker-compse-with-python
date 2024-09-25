@@ -1,0 +1,44 @@
+{% extends "layouts/index.html" %}
+{% load static %}
+{% block content %}
+  <div class="container">
+    <div class="row">
+        <!-- <div class="mb-3">                    
+          <label for="name">Name <span style="color: red">*</span>:</label>
+          <input type="text" class="form-control" id="name" name="name" value="{{ object.name }}" required>
+        </div> -->
+        <div class="col-6">
+          <!-- <label for="image">Image <span style="color: red">*</span>:</label> -->
+          {% if object.image %}
+            <div class="mb-2">
+              <img src="{{ object.image.url }}" alt="Current Image" class="img-detail">
+            </div>
+          {% endif %}
+        </div>
+        <div class="description col-6">
+          <h5>Tên Sản Phẩm : {{ object.name }}</h5>
+          <h5>Gia :100k</h5>
+          
+            <div class="clickbuy">
+              <button class="btn btn-success">Add To Cart 
+                  <img style="width: 20px; height:20px;" 
+                  src="{% static 'images/icons/cart-arrow-down-solid.svg' %}" alt="Icons">
+              </button>
+              <button class="btn btn-primary">Buy Now 
+                  <img style="width: 20px; height:20px;" 
+                  src="{% static 'images/icons/shopify-brands-solid.svg' %}" alt="Icons"></button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <b><span style="color: red;">*</span>Description Product</b>: 
+          <p>- Auto-layout for flexbox grid columns also means you can set the width of one column 
+              and have the sibling columns automatically resize around it. <br>
+            - You may use predefined grid classes (as shown below), grid mixins, or inline widths. <br>
+            - Note that the other columns will resize no matter the width of the center column.</p>
+      </div>
+    </div>
+</div>
+{% endblock content %}
+  
