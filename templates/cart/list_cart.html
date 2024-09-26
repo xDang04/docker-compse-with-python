@@ -1,0 +1,48 @@
+{% extends 'layouts/index.html' %}
+
+{% load static %}
+{% block cart_content %}
+<h2>Giỏ hàng của bạn</h2>
+
+    
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Name</th>
+                <th>Image</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if items %}
+                {% for item in items %}
+                    <tr class="listcart">
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ item.post.name }}</td>
+                        <td>
+                            <img class="img-cart" src="{{ item.post.image.url }}" alt="Error">
+                        </td>
+                        <td>{{ item.post.price | floatformat:3 }} VND</td>
+                        <td>
+                            <input style="width:50px;" type="number" class="update-quantity" data-item-id="{{ item.id }}" value="{{ item.quantity }}" min="1">
+                        </td>
+                        <td>
+                            <a href="{% url 'posts:delete_cart' item.id %}" class="btn btn-danger">Xóa</a>
+                        </td>
+                        
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <p>Giỏ hàng của bạn đang trống.</p>
+            {% endif %}
+        </tbody>
+            <!-- <li> x  - $ mỗi sản phẩm</li> -->
+    </table>
+    <p class="total_price">Tổng giá: {{ total_price | floatformat:3 }} VND</p>
+    
+
+{% endblock cart_content %}
+    

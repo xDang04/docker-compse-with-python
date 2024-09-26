@@ -15,8 +15,8 @@
                             <img class="img" src="{{ post.image.url }}" alt="{{ post.name }}">
                         {% endif %}
                     </div>
-                    <div style="text-align: left;">
-                        <span class="">{{ post.name }}</span>
+                    <div style="text-align: left; margin-top: 15px">
+                        <span class=""><a href="{% url 'posts:detail-post' post.pk %}">{{ post.name }}</a></span>
                         
                     </div>
                     <div class="" style="text-align: left;">
@@ -30,13 +30,13 @@
                         <span>Post at {{ post.timestamp }}</span> 
                     </div>  -->
                     <div class="action">
-                        <a class="btn btn-primary" id="detail_post_{{post.id_post}}" href="{% url 'posts:detail-post' post.pk %}">detail</a>
+                        <!-- <a class="btn btn-primary" id="detail_post_{{post.id_post}}" href="{% url 'posts:detail-post' post.pk %}">detail</a> -->
                         <a class="btn btn-warning" id="add_to_cart_{{post.id_post}}" href="{% url 'posts:add_to_cart' post.pk %}">
                             Add To Cart
                             <img style="width: 20px; height:20px;" src="{% static 'images/icons/cart-arrow-down-solid.svg' %}" alt="Icons">
                         </a>
-                        <!-- <a class="btn btn-danger" id="update_post_{{post.id}}" href="{% url 'posts:update-post' post.pk %}">Update</a> -->
-                        <!-- <button class="submit_delete btn btn-danger" id="submit_delete" data-id="{{post.id}}" class="">
+                        <!-- <a class="btn btn-danger" id="update_post_{{post.pk}}" href="{% url 'posts:update-post' post.pk %}">Update</a> -->
+                        <!-- <button class="submit_delete btn btn-danger" id="submit_delete" data-id="{{post.pk}}" class="">
                             Delete Post
                         </button> -->
                     </div>
@@ -79,9 +79,9 @@
         });
 
         $('#confirm_change').click(function(e) {
-            const id = $(this).attr('data-id'); 
-            console.log(id)
-            const data = {id: id}
+            const id_post = $(this).attr('data-id'); 
+            console.log(id_post)
+            const data = {id_post: id_post}
             $.ajax({
                 type: "POST",
                 url: "{% url 'api:api-delete-post' %}",

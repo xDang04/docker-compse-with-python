@@ -66,18 +66,6 @@ def search_post(request):
     # Render the search results in the template
     return render(request, 'posts/search_results.html', {'query': query, 'results': results})
 
-def add_to_cart(request, pk):
-    post = get_object_or_404(Post, id_post=pk)
-    cart, created = Cart.objects.get_or_create(user=request.user)  # Tạo giỏ hàng nếu chưa có
-
-    # Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
-    cart_item, created = CartItem.objects.get_or_create(cart=cart, post=post)
-    if not created:
-        cart_item.quantity += 1  # Tăng số lượng nếu sản phẩm đã có trong giỏ hàng
-        cart_item.save()
-
-    return redirect('posts:list-cart')  # Redirect đến trang giỏ hàng
-
 def register(request):
     if request.method == 'POST':
         form = CustomerRegisterForm(request.POST)
@@ -111,3 +99,36 @@ def user_login(request):
         form = CustomerLoginForm()
     
     return render(request, 'auth/login.html', {'form': form})
+
+def add_to_cart(request, pk):
+    post = get_object_or_404(Post, id_post=pk)
+    cart, created = Cart.objects.get_or_create(user=request.user)  # Tạo giỏ hàng nếu chưa có
+
+    # Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+    cart_item, created = CartItem.objects.get_or_create(cart=cart, post=post)
+    if not created:
+        cart_item.quantity += 1  # Tăng số lượng nếu sản phẩm đã có trong giỏ hàng
+    cart_item.save()
+
+    return redirect('posts:list_cart')  # Redirect đến trang giỏ hàng
+def list_cart(request):
+    cart = Cart.objects.filter(user=request.user).first()
+    total_price = 0
+    
+    if cart:
+        items = cart.items.all()
+        total_price = sum(item.quantity * item.post.price for item in items)
+    else:
+        items = []
+    
+    return render(request, 'cart/list_cart.html', {
+        'cart' : cart,
+        'items' : items,
+        'total_price' : total_price
+    })
+    
+def delete_cart(request, item_id):
+    cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
+    # Delete post cart
+    cart_item.delete()  
+    return redirect('posts:list_cart')

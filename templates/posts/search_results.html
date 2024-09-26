@@ -1,16 +1,40 @@
 {% extends 'layouts/index.html' %}
-
+{% load static %}
 
 {% block search_results %}
     {% if query %}
         <h3>Results Search Keywords: "{{ query }}"</h3>
-        <ul>
+        <!-- <ul>
             {% for post in results %}
-                <li><a href="{% url 'posts:detail-post' post.pk %}">{{ post.name }}</a></li>
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <td>
+                            <img class="img-cart" src="{{ item.post.image.url }}" alt="Error">
+                        </td>
+                    </div>
+                    <div>
+                        <li><a href="{% url 'posts:detail-post' post.pk %}">{{ post.name }}</a></li>
+                    </div>
+                </div>
             {% empty %}
                 <li>Không tìm thấy bài viết nào phù hợp.</li>
             {% endfor %}
-        </ul>
+        </ul> -->
+        <div class="ms-5 container-cus">
+            {% for post in results %}            
+                <div class="content">            
+                    <div class="image">
+                        {% if post.image %}
+                            <img class="img" src="{{ post.image.url }}" alt="{{ post.name }}">
+                        {% endif %}
+                    </div>
+                    <div style="text-align: left;">
+                        <a href="{% url 'posts:detail-post' post.pk %}">{{ post.name }}</a>
+                        
+                    </div>
+                </div>           
+            {% endfor %}
+        </div>
     {% else %}
         <p>Không có từ khóa tìm kiếm nào được nhập.</p>
     {% endif %}

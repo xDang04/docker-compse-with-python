@@ -1,7 +1,4 @@
-from django.shortcuts import render
-from django.views.generic import ListView, CreateView, UpdateView
-from django.urls import reverse
-from django.contrib.messages.views import SuccessMessageMixin
+
 from posts.models import Post
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -63,14 +60,13 @@ def delete_post(request):
         # print("222222222")
         body = request.data
         id_instance = body.get('id_post')
-        post = Post.objects.filter(id=id_instance).first()
+        post = Post.objects.filter(id_post=id_instance).first()
         if not post:  # If the post does not exist
             return Response({"error": "Post not found."}, status=status.HTTP_404_NOT_FOUND)     
         post.delete()
         return Response({"message": "Post deleted successfully."}, status=status.HTTP_200_OK)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-    
 # @api_view(["POST"])
 # def detail_post(request):
 #     body = request.data

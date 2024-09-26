@@ -10,12 +10,13 @@
           </div>
         </div>
 
-        <!-- <div class="col-sm-6 offset-sm-2 offset-md-0 col-lg-5 d-none d-lg-block">
+        <div class="col-sm-6 offset-sm-2 offset-md-0 col-lg-5 d-none d-lg-block">
           <div class="search-bar border rounded-2 px-3 border-dark-subtle">
-            <form id="search-form" class="text-center d-flex align-items-center" action="#" method="get">
+            <form id="search-form" class="text-center d-flex align-items-center" action="{% url 'posts:search_post' %}" 
+            method="get">
               {% csrf_token %}
               <input type="text" class="form-control border-0 bg-transparent" id="search exampleInputPassword1"
-                placeholder="Search ...." name="search" />
+                placeholder="Search ...." name="query" />
               
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                 <path fill="currentColor"
@@ -24,35 +25,27 @@
             </form>
             
           </div>
-        </div> -->
-        <div class="col-sm-6 offset-sm-2 offset-md-0 col-lg-5 d-none d-lg-block">
-          <form method="get" action="{% url 'posts:search_post' %}">
-            <input type="text" name="query" placeholder="Search Posts ...">
-            <button type="submit">Tìm kiếm</button>
-          </form>
         </div>
+
         <div
-          class="contact col-sm-8 col-lg-4 d-flex justify-content-end gap-5 align-items-center mt-4 mt-sm-0 justify-content-center justify-content-sm-end">
-          <!-- <div class="support-box text-end d-none d-xl-block">
-            <span class="fs-6 secondary-font text-muted fw-bolder">Phone</span>
-            <h5 class="mb-0"></h5>
-          </div> -->
+          class="contact col-sm col-lg d-flex justify-content-end gap-3 align-items-center mt-4 mt-sm-0 justify-content-center justify-content-sm-end">
           
           <div class="support-box text-end d-none d-xl-block">
             <span class="fs-6 secondary-font text-muted fw-bolder">Contact</span>
-            <h5 class="mb-0"></h5>
           </div>
-          <div class="support-box text-end d-none d-xl-block"></div>
+
+          <div class="support-box text-end d-none d-xl-block">
+            <span class="fs-6 secondary-font text-muted fw-bolder">Introduction</span>
+            
+          </div>
+
+          <div class="support-box text-end d-none d-xl-block">
             <span class="fs-6 secondary-font text-muted fw-bolder">
               {% if user.is_authenticated %}
                     Xin chào, {{ user.username }}!
                 {% endif %}
             </span>
-            <h5 class="mb-0"></h5>
           </div>
-
-
-
         </div>
       </div>
     </div>
@@ -64,7 +57,7 @@
     <div class="container">
       <nav class="main-menu d-flex navbar navbar-expand-lg ">
 
-        <div class="d-flex d-lg-none align-items-end mt-3">
+        <!-- <div class="d-flex d-lg-none align-items-end mt-3">
           <ul class="d-flex justify-content-end list-unstyled m-0">
             <li>
               <a href="account.html" class="mx-3">
@@ -72,21 +65,20 @@
               </a>
             </li>
             <li>
-              <a href="wishlist.html" class="mx-3">
+              <a href="{% url 'posts:list_cart' %}" class="mx-3">
                 <iconify-icon icon="mdi:heart" class="fs-4"></iconify-icon>
               </a>
             </li>
 
             <li>
-              <a href="#" class="mx-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart"
-                aria-controls="offcanvasCart">
+              <a href="{% url 'posts:list_cart' %}" class="mx-3">
                 <iconify-icon icon="mdi:cart" class="fs-4 position-relative"></iconify-icon>
                 <span class="position-absolute translate-middle badge rounded-circle bg-primary pt-2">
                   03
                 </span>
               </a>
             </li>
-
+            
             <li>
               <a href="#" class="mx-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSearch"
                 aria-controls="offcanvasSearch">
@@ -96,18 +88,18 @@
             </li>
           </ul>
 
-        </div>
+        </div> -->
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+        <!-- <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
           aria-controls="offcanvasNavbar">
           <span class="navbar-toggler-icon"></span>
-        </button>
+        </button> -->
 
         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
 
-          <div class="offcanvas-header justify-content-center">
+          <!-- <div class="offcanvas-header justify-content-center">
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-          </div>
+          </div> -->
 
           <div class="offcanvas-body justify-content-between">
             <select class="filter-categories border-0 mb-0 me-5">
@@ -125,7 +117,7 @@
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" role="button" id="pages" data-bs-toggle="dropdown"
                   aria-expanded="false">Pages</a>
-                <ul class="dropdown-menu" aria-labelledby="pages">
+                <!-- <ul class="dropdown-menu" aria-labelledby="pages">
                   <li><a href="{% url 'posts:create-post' %}" class="dropdown-item">add postt</a></li>
                   <li><a href="{% url 'posts:create-post' %}" class="dropdown-item">add</a></li>
                   <li><a href="index.html" class="dropdown-item">Single Product</a></li>
@@ -140,7 +132,7 @@
                   <li><a href="index.html" class="dropdown-item">Thankyou</a></li>
                   <li><a href="index.html" class="dropdown-item">Error 404</a></li>
                   <li><a href="index.html" class="dropdown-item">Styles</a></li>
-                </ul>
+                </ul> -->
               </li>
               <li class="nav-item">
                 <a href="index.html" class="nav-link">Shop</a>
@@ -169,7 +161,7 @@
                 </li>
 
                 <li class="">
-                  <a href=""  class="mx-3" >
+                  <a href="{% url 'posts:list_cart' %}"  class="mx-3" >
                     <iconify-icon icon="mdi:cart" class="fs-4 position-relative"></iconify-icon>
                     <span class="position-absolute translate-middle badge rounded-circle bg-primary pt-2">
                       03

@@ -20,10 +20,10 @@
           <h5>Gia :100k</h5>
           
             <div class="clickbuy">
-              <button class="btn btn-success">Add To Cart 
-                  <img style="width: 20px; height:20px;" 
-                  src="{% static 'images/icons/cart-arrow-down-solid.svg' %}" alt="Icons">
-              </button>
+              <a class="btn btn-success" id="add_to_cart_{{post.id_post}}" href="{% url 'posts:add_to_cart' post.pk %}">
+                  Add To Cart
+                  <img style="width: 20px; height:20px;" src="{% static 'images/icons/cart-arrow-down-solid.svg' %}" alt="Icons">
+              </a>
               <button class="btn btn-primary">Buy Now 
                   <img style="width: 20px; height:20px;" 
                   src="{% static 'images/icons/shopify-brands-solid.svg' %}" alt="Icons"></button>
