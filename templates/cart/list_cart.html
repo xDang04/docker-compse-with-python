@@ -1,11 +1,19 @@
 {% extends 'layouts/index.html' %}
 
-{% load static %}
-{% block cart_content %}
-<h2>Giỏ hàng của bạn</h2>
-
+{% block title %}
+    My-cart
+{% endblock title %}
     
-    <table class="table table-bordered">
+{% block content %}
+    <div class="d-flex justify-content-between">
+        <h2>Giỏ hàng </h2>
+        <form action="{% url 'posts:delete_all_cart' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete_all_cart</button>
+        </form>
+    </div>
+
+    <table class="table table-bordered" style="min-height: 200px;">
         <thead>
             <tr>
                 <th>STT</th>
@@ -14,35 +22,32 @@
                 <th>Price</th>
                 <th>Quantity</th>
                 <th>Action</th>
+                <th>Total Price</th>
             </tr>
         </thead>
         <tbody>
-            {% if items %}
-                {% for item in items %}
-                    <tr class="listcart">
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ item.post.name }}</td>
-                        <td>
-                            <img class="img-cart" src="{{ item.post.image.url }}" alt="Error">
+            {% for item, item_total in items %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ item.post.name }}</td>
+                    <td>
+                        <img class="img-cart" src="{{ item.post.image.url }}" alt="{{ item.post.name }}">
+                    </td>
+                    <td>{{ item.post.price|floatformat:3 }} VNĐ</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>
+                            <a href="{% url 'posts:delete_cart' item.pk %}" class="btn btn-danger">Xóa</a>
                         </td>
-                        <td>{{ item.post.price | floatformat:3 }} VND</td>
-                        <td>
-                            <input style="width:50px;" type="number" class="update-quantity" data-item-id="{{ item.id }}" value="{{ item.quantity }}" min="1">
-                        </td>
-                        <td>
-                            <a href="{% url 'posts:delete_cart' item.id %}" class="btn btn-danger">Xóa</a>
-                        </td>
-                        
-                    </tr>
-                {% endfor %}
-            {% else %}
-                <p>Giỏ hàng của bạn đang trống.</p>
-            {% endif %}
+                    <td>{{ item_total|floatformat:3 }} VNĐ</td>  <!-- Hiển thị giá trị đã tính từ view -->
+                </tr>
+            {% endfor %}
         </tbody>
-            <!-- <li> x  - $ mỗi sản phẩm</li> -->
     </table>
-    <p class="total_price">Tổng giá: {{ total_price | floatformat:3 }} VND</p>
-    
 
-{% endblock cart_content %}
-    
+    <p style="text-align: right;" class="me-3"><strong>Tổng giá:</strong> {{ total_price|floatformat:3 }} VND</p>
+
+    <form class="float-end me-3" method="post" action="{% url 'posts:checkout' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">Xác nhận thanh toán</button>
+    </form>
+{% endblock %}

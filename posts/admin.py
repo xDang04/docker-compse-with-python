@@ -3,5 +3,6 @@ from .models import *
 
 admin.site.register(Post)
 admin.site.register(Cart)
-admin.site.register(CustomUser)
+admin.site.register(Category)
 admin.site.register(CartItem)
+admin.site.register(Order)

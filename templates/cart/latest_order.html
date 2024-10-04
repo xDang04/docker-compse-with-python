@@ -1,0 +1,34 @@
+{% extends 'layouts/index.html' %}
+
+{% block content %}
+    <a class="btn btn-danger mb-3" href="{% url 'posts:list-posts' %}">Tiếp tục mua hàng</a>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Mã đơn hàng</th>
+                <th>Trạng thái</th>
+                <th>Ngày đặt</th>
+                <th>Người đặt</th>
+                <th>Số điện thoại</th>
+                <th>Địa chỉ nhận hàng</th>
+                <th>Tổng giá</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if error %}
+                <p>{{ error }}</p>
+            {% else %}
+                <tr>
+                    <td>{{ order_id }}</td>
+                    <td>{{ status }}</td>
+                    <td>{{ order_date|date:"d/m/Y" }}</td>
+                    <td>{{ username }}</td>
+                    <td>{{ phone }}</td>
+                    <td>{{ address }}</td>
+                    <td>{{ total }} VNĐ</td>
+                    
+                </tr>
+             {% endif %}
+        </tbody>
+    </table>
+{% endblock %}

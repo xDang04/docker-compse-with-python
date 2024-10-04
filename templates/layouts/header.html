@@ -31,21 +31,54 @@
           class="contact col-sm col-lg d-flex justify-content-end gap-3 align-items-center mt-4 mt-sm-0 justify-content-center justify-content-sm-end">
           
           <div class="support-box text-end d-none d-xl-block">
-            <span class="fs-6 secondary-font text-muted fw-bolder">Contact</span>
-          </div>
-
-          <div class="support-box text-end d-none d-xl-block">
-            <span class="fs-6 secondary-font text-muted fw-bolder">Introduction</span>
-            
+            <span class="fs-6 secondary-font text-muted fw-bolder">
+              <a class="aheader" href="{% url 'posts:contact' %}">Contact</a>
+            </span>
           </div>
 
           <div class="support-box text-end d-none d-xl-block">
             <span class="fs-6 secondary-font text-muted fw-bolder">
+              <a class="aheader" href="{% url 'posts:introduction' %}">Introduction</a>
+            </span>
+            
+          </div>
+
+          <!-- <div class="support-box text-end d-none d-xl-block">
+            <span class="fs-6 secondary-font text-muted fw-bolder">
               {% if user.is_authenticated %}
-                    Xin chào, {{ user.username }}!
+                    Hi, {{ user.username }}!
                 {% endif %}
             </span>
+          </div> -->
+          <div class="support-box text-end d-none d-xl-block">
+            
+
+            <!-- Dropdown menu -->
+            <div class="dropdown d-inline-block">
+              <button class="btn btn-default dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                  <span class="fs-6 secondary-font text-muted fw-bolder">
+                      {% if user.is_authenticated %}
+                          Hi, {{ user.username }}!
+                      {% else %}
+                          Đăng nhập
+                      {% endif %}
+                  </span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                  {% if user.is_authenticated %}
+                      <li>
+                          <a class="dropdown-item" href="{% url 'posts:logout' %}">Đăng xuất</a>
+                      </li>
+                  {% else %}
+                      <li>
+                          <a class="dropdown-item" href="{% url 'posts:login' %}">Đăng nhập</a>
+                      </li>
+                  {% endif %}
+              </ul>
+            </div>
+
           </div>
+
         </div>
       </div>
     </div>
@@ -117,31 +150,16 @@
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" role="button" id="pages" data-bs-toggle="dropdown"
                   aria-expanded="false">Pages</a>
-                <!-- <ul class="dropdown-menu" aria-labelledby="pages">
-                  <li><a href="{% url 'posts:create-post' %}" class="dropdown-item">add postt</a></li>
-                  <li><a href="{% url 'posts:create-post' %}" class="dropdown-item">add</a></li>
-                  <li><a href="index.html" class="dropdown-item">Single Product</a></li>
-                  <li><a href="index.html" class="dropdown-item">Cart</a></li>
-                  <li><a href="index.html" class="dropdown-item">Wishlist</a></li>
-                  <li><a href="index.html" class="dropdown-item">Checkout</a></li>
-                  <li><a href="{% url 'posts:create-post' %}" class="dropdown-item">Blog</a></li>
-                  <li><a href="index.html" class="dropdown-item">Single Post</a></li>
-                  <li><a href="index.html" class="dropdown-item">Contact</a></li>
-                  <li><a href="index.html" class="dropdown-item">FAQs</a></li>
-                  <li><a href="index.html" class="dropdown-item">Account</a></li>
-                  <li><a href="index.html" class="dropdown-item">Thankyou</a></li>
-                  <li><a href="index.html" class="dropdown-item">Error 404</a></li>
-                  <li><a href="index.html" class="dropdown-item">Styles</a></li>
-                </ul> -->
+                
               </li>
               <li class="nav-item">
                 <a href="index.html" class="nav-link">Shop</a>
               </li>
               <li class="nav-item">
-                <a href="{% url 'posts:create-post' %}" class="nav-link">Add Posts</a>
+                <a href="{% url 'posts:order_latest' %}" class="nav-link">Order</a>
               </li>
               <li class="nav-item">
-                <a href="index.html" class="nav-link">Contact</a>
+                <a href="{% url 'posts:contact' %}" class="nav-link">Contact</a>
               </li>
               <li class="nav-item">
               </li>

@@ -1,25 +1,15 @@
+
 {% extends 'layouts/index.html' %}
+
+{% block title %}
+    Search-posts
+{% endblock title %}
+    
 {% load static %}
 
 {% block search_results %}
     {% if query %}
         <h3>Results Search Keywords: "{{ query }}"</h3>
-        <!-- <ul>
-            {% for post in results %}
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <td>
-                            <img class="img-cart" src="{{ item.post.image.url }}" alt="Error">
-                        </td>
-                    </div>
-                    <div>
-                        <li><a href="{% url 'posts:detail-post' post.pk %}">{{ post.name }}</a></li>
-                    </div>
-                </div>
-            {% empty %}
-                <li>Không tìm thấy bài viết nào phù hợp.</li>
-            {% endfor %}
-        </ul> -->
         <div class="ms-5 container-cus">
             {% for post in results %}            
                 <div class="content">            

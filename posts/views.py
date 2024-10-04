@@ -4,13 +4,11 @@ from django.urls import reverse
 from django.contrib.messages.views import SuccessMessageMixin
 from .models import *
 from .forms import *
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.forms import UserCreationForm
-from django.http import HttpResponseRedirect
+from django.http import JsonResponse
 from django.contrib import messages
-import json
+
 
 
 # Create your views here.
@@ -29,19 +27,48 @@ class ListPostView(ListView):
         context['posts'] = Post.objects.all()
         return context
 
+class ListCategoryView(ListView):
+    model = Category
+    template_name = 'category/list-category.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        return context
+
 class CreatePostView(SuccessMessageMixin, CreateView):
+    model = Post
     template_name = 'posts/create-post.html'  
     form_class = CreatePostForm
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()  # Lấy danh sách category
+        return context
+    
     success_message = 'Create Post successfully!'
     
 class UpdatePostView(SuccessMessageMixin, UpdateView):
     model = Post
     template_name = 'posts/update-post.html'
-    fields = ['name', 'content']
+    fields = ['name', 'content', 'ingredient']
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        
+        return context
     success_message = 'Update Post successfully!'
     
     def get_success_url(self):
         return reverse('posts:list-posts')
+
+class UpdateCategory(UpdateView):
+    model = Category
+    template_name = 'category/update-category.html'
+    fields = '__all__'
+    def get_success_url(self):
+        return reverse('posts:list-category')
 
 class DetailPostView(DetailView):
     model = Post
@@ -52,7 +79,6 @@ def delete_post(request, pk):
     post = Post.objects.filter(id=pk)
     post.delete()
     context = {
-    #   "messages": "Delete Post successfully",
       'posts': Post.objects.all()
     }
     return render(request, 'posts/list-posts.html', context)
@@ -61,10 +87,57 @@ def search_post(request):
     query = request.GET.get('query')  # Lấy từ khóa tìm kiếm từ URL
     results = []
     if query:
-        # Tìm kiếm trong title hoặc content chứa từ khóa
+        # Tìm kiếm name chứa từ khóa
         results = Post.objects.filter(name__icontains=query)
     # Render the search results in the template
     return render(request, 'posts/search_results.html', {'query': query, 'results': results})
+
+def list_cart(request):
+    cart = Cart.objects.filter(user=request.user).first()
+    total_price = 0
+    item_totals = []
+
+    if cart:
+        items = cart.items.all()  # Sử dụng related_name 'items'
+        for item in items:
+            item_total = item.quantity * item.post.price
+            item_totals.append((item, item_total))
+            total_price += item_total
+    else:
+        items = []
+
+    return render(request, 'cart/list_cart.html', {
+        'cart': cart,
+        'items': item_totals,
+        'total_price': total_price
+    })
+    
+def delete_cart(request, item_id):
+    cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
+    # Delete post cart
+    cart_item.delete()  
+    return redirect('posts:list_cart')
+ 
+
+def add_to_cart(request, pk):
+    if not request.user.is_authenticated:
+        messages.error(request, "Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.")
+        return redirect('/posts/login') 
+    
+    post = get_object_or_404(Post, id_post=pk)
+    quantity = int(request.POST.get('quantity', 1))
+    cart, created = Cart.objects.get_or_create(user=request.user) 
+
+    cart_item, created = CartItem.objects.get_or_create(cart=cart, post=post)
+    if not created:
+        cart_item.quantity += 1 
+    else:
+        cart_item.quantity = quantity
+    cart_item.save()
+    
+    
+    return redirect('posts:list_cart') 
+
 
 def register(request):
     if request.method == 'POST':
@@ -72,7 +145,7 @@ def register(request):
         if form.is_valid():
             user = form.save()  # Tạo người dùng mới
             messages.success(request, 'Đăng ký thành công!')
-            return redirect('posts:list-posts')
+            return redirect('posts:login')
         else:
             messages.error(request, 'Đã có lỗi xảy ra. Vui lòng kiểm tra lại.')
     else:
@@ -100,35 +173,75 @@ def user_login(request):
     
     return render(request, 'auth/login.html', {'form': form})
 
-def add_to_cart(request, pk):
-    post = get_object_or_404(Post, id_post=pk)
-    cart, created = Cart.objects.get_or_create(user=request.user)  # Tạo giỏ hàng nếu chưa có
+def introduction(request):
+    return render(request, "posts/introduction.html")
 
-    # Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
-    cart_item, created = CartItem.objects.get_or_create(cart=cart, post=post)
-    if not created:
-        cart_item.quantity += 1  # Tăng số lượng nếu sản phẩm đã có trong giỏ hàng
-    cart_item.save()
+def contact(request):
+    return render(request, "posts/contact.html")
 
-    return redirect('posts:list_cart')  # Redirect đến trang giỏ hàng
-def list_cart(request):
-    cart = Cart.objects.filter(user=request.user).first()
-    total_price = 0
+def checkout(request):
+    if request.method == 'POST':
+        address = request.POST.get('address')  
+        phone = request.POST.get('phone')
+
+        if not address:  
+            messages.error(request, "Địa chỉ không được để trống!")
+            return redirect('posts:checkout')
+
+        cart = Cart.objects.filter(user=request.user).first()
+        if cart and cart.items.exists():
+            total = sum(item.quantity * item.post.price for item in cart.items.all()) 
+            order = Order.objects.create(
+                user=request.user,
+                address=address,
+                phone=phone,
+                total=total,
+                status='Chờ xác nhận'
+            )
+            # for cart_item in cart.items.all():
+            #     CartItem.objects.create(
+            #         cart=cart,  # Liên kết với cart hiện tại
+            #         post=cart_item.post,
+            #         quantity=cart_item.quantity,
+            #         order=order
+            #     )
+            
+            cart.items.all().delete()
+            cart.delete()
+            messages.success(request, "Đơn hàng của bạn đã được xác nhận!")
+            
+            return redirect('posts:order_latest') 
+        else:
+            messages.error(request, "Giỏ hàng của bạn đang trống!")
+    return render(request, 'cart/checkout.html')
+        
+def delete_all_cart(request):
+    if request.method == 'POST':
+        cart = Cart.objects.filter(user=request.user)
+        cart.delete()
+        return redirect('posts:list-posts')
     
-    if cart:
-        items = cart.items.all()
-        total_price = sum(item.quantity * item.post.price for item in items)
+    
+def latest_order(request):
+    latest_order = Order.objects.filter(user=request.user).order_by('-order_date').first()
+    # latest_order = get_object_or_404(Order, user=request.user)
+    # order_items = CartItem.objects.filter(order=latest_order)
+    
+    if latest_order:
+        context = {
+            # 'order_id': latest_order.id,
+            'status': latest_order.status,
+            'order_date': latest_order.order_date,
+            'total': latest_order.total,
+            'phone' : latest_order.phone,
+            'address' : latest_order.address,
+            'username': latest_order.user.username,
+            'email': latest_order.user.email,
+            # 'order_items': order_items,
+        }
     else:
-        items = []
-    
-    return render(request, 'cart/list_cart.html', {
-        'cart' : cart,
-        'items' : items,
-        'total_price' : total_price
-    })
-    
-def delete_cart(request, item_id):
-    cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
-    # Delete post cart
-    cart_item.delete()  
-    return redirect('posts:list_cart')
+        context = {
+            'error': 'Không có đơn hàng nào'
+        }
+        
+    return render(request, 'cart/latest_order.html', context)

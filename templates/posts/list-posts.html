@@ -1,13 +1,14 @@
 
 {% extends "layouts/index.html" %}
 {% block title %}
-    List Post | {{ block.super }}
+    List-Post 
 {% endblock title %}
 {% load static %}
 
 {% block content %}
     {% if posts %}
         <div class="ms-5 container-cus">
+            
             {% for post in posts %}            
                 <div class="content">            
                     <div class="image">
@@ -19,22 +20,15 @@
                         <span class=""><a href="{% url 'posts:detail-post' post.pk %}">{{ post.name }}</a></span>
                         
                     </div>
-                    <div class="" style="text-align: left;">
+                    <div class="price">
                         {{ post.price | floatformat:3}} VNĐ
                     </div>  
-                    <!-- <div class="">
-                        {{ post.content }}
-                    </div> -->
-                    
-                    <!-- <div >
-                        <span>Post at {{ post.timestamp }}</span> 
-                    </div>  -->
                     <div class="action">
                         <!-- <a class="btn btn-primary" id="detail_post_{{post.id_post}}" href="{% url 'posts:detail-post' post.pk %}">detail</a> -->
-                        <a class="btn btn-warning" id="add_to_cart_{{post.id_post}}" href="{% url 'posts:add_to_cart' post.pk %}">
+                        <!-- <a class="btn btn-warning" id="add_to_cart_{{post.id_post}}" href="{% url 'posts:add_to_cart' post.pk %}">
                             Add To Cart
                             <img style="width: 20px; height:20px;" src="{% static 'images/icons/cart-arrow-down-solid.svg' %}" alt="Icons">
-                        </a>
+                        </a> -->
                         <!-- <a class="btn btn-danger" id="update_post_{{post.pk}}" href="{% url 'posts:update-post' post.pk %}">Update</a> -->
                         <!-- <button class="submit_delete btn btn-danger" id="submit_delete" data-id="{{post.pk}}" class="">
                             Delete Post

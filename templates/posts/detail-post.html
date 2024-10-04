@@ -1,44 +1,90 @@
 {% extends "layouts/index.html" %}
+
+{% block title %}
+  Detail-post
+{% endblock title %}
+  
 {% load static %}
 {% block content %}
   <div class="container">
     <div class="row">
-        <!-- <div class="mb-3">                    
-          <label for="name">Name <span style="color: red">*</span>:</label>
-          <input type="text" class="form-control" id="name" name="name" value="{{ object.name }}" required>
-        </div> -->
-        <div class="col-6">
-          <!-- <label for="image">Image <span style="color: red">*</span>:</label> -->
-          {% if object.image %}
-            <div class="mb-2">
-              <img src="{{ object.image.url }}" alt="Current Image" class="img-detail">
-            </div>
-          {% endif %}
-        </div>
-        <div class="description col-6">
-          <h5>Tên Sản Phẩm : {{ object.name }}</h5>
-          <h5>Gia :100k</h5>
-          
-            <div class="clickbuy">
-              <a class="btn btn-success" id="add_to_cart_{{post.id_post}}" href="{% url 'posts:add_to_cart' post.pk %}">
-                  Add To Cart
-                  <img style="width: 20px; height:20px;" src="{% static 'images/icons/cart-arrow-down-solid.svg' %}" alt="Icons">
-              </a>
-              <button class="btn btn-primary">Buy Now 
-                  <img style="width: 20px; height:20px;" 
-                  src="{% static 'images/icons/shopify-brands-solid.svg' %}" alt="Icons"></button>
-            </div>
-        </div>
-    </div>
-    <div class="row">
+
       <div class="col-6">
-        <b><span style="color: red;">*</span>Description Product</b>: 
-          <p>- Auto-layout for flexbox grid columns also means you can set the width of one column 
-              and have the sibling columns automatically resize around it. <br>
-            - You may use predefined grid classes (as shown below), grid mixins, or inline widths. <br>
-            - Note that the other columns will resize no matter the width of the center column.</p>
+        {% if object.image %}
+          <div class="mb-2">
+            <img src="{{ object.image.url }}" alt="Current Image" class="img-detail">
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="description col-6">
+        <h5>{{ object.name }}</h5>
+        <label class="fst-normal" for="price">Giá : 
+          <span style="color: red;" class="fw-bolder">{{ object.price | floatformat:3}} VNĐ</span>
+        </label><br>
+        <label for="" class="fw-bolder">* Thành phần chính : </label><br>
+          <span style="white-space: pre-line;">{{ object.ingredient }}</span>
+          <p class="mt-3"><b>Danh mục </b>: {{ object.category.name }}</p>
+        <div class="clickbuy">
+
+          <div class="quatity-detail mb-3">
+            <h6 class="fw-bolder">Số Lượng :</h6>
+            <input type="button" value="-" class="minus button is-form">			
+            <input type="number" id="quantity_66f6246d67c2e" class="quantityinput" step="1" min="1" max="" 
+              name="quantity" value="1" title="SL" size="4" placeholder="" inputmode="numeric">
+            <input type="button" value="+" class="plus button is-form">	
+          </div>
+          <div class="d-flex">
+            <form method="POST" action="{% url 'posts:add_to_cart' post.pk %}">
+              {% csrf_token %}
+                <input type="hidden" name="quantity" id="hidden-quantity" value="1">
+                <button type="submit" class="addtocart btn btn-danger">Thêm vào giỏ hàng
+                  <img style="width: 20px; height:20px;" src="{% static 'images/icons/cart-arrow-down-solid.svg' %}" alt="Icons">
+                </button>
+            </form>   
+            <button class="buynow btn btn-primary ms-3">Buy Now 
+                <img style="width: 20px; height:20px;" 
+                src="{% static 'images/icons/shopify-brands-solid.svg' %}" alt="Icons">
+            </button>
+          </div>
+        </div>
       </div>
     </div>
-</div>
+
+    <div class="row">
+      <div class="col-9">
+        <p style="white-space: pre-line;">{{ object.content }}</p>
+      </div>
+      <div class="post-similar">
+        <h2>Sản phẩm tương tự</h5>
+          
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function(){
+      const $minusBtn = $('.minus');
+      const $plusBtn = $('.plus');
+      const $quantityInput = $('.quantityinput');
+      const $hiddenQuantityInput = $('#hidden-quantity');
+
+      $plusBtn.on('click', function(){
+        let quantity = parseInt($quantityInput.val());
+        $quantityInput.val(quantity + 1);
+        $hiddenQuantityInput.val($quantityInput.val());
+      });
+      $minusBtn.on('click', function(){
+        let quantity = parseInt($quantityInput.val());
+        if(quantity > 1){
+          $quantityInput.val(quantity -1);
+        }
+        $hiddenQuantityInput.val($quantityInput.val());
+      });
+      $quantityInput.on('change', function () {
+        $hiddenQuantityInput.val($quantityInput.val());
+      });
+    });
+  </script>
 {% endblock content %}
   

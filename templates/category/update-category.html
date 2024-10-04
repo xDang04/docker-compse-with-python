@@ -1,0 +1,57 @@
+{% extends 'layouts/index.html' %}
+
+
+{% block title %}
+    Editcategory
+{% endblock title %}
+
+
+{% block content %}
+    <div class="updatecategory">
+        <form action="#" method="POST" >
+            {% csrf_token %}
+            <div class="updatecate">
+                <label for="name">Name: </label>
+                <input type="text" class="form-control" id="name" value="{{object.name}}">
+            </div>
+            <button type="button" class="btn btn-danger" data-id="{{object.id}}" id="updatecategory">Update</button>
+        </form>
+    </div>
+
+    <script>
+        var update_category = "{% url 'api:api-update-category' %}";
+        $('#updatecategory').click(function(e){
+            e.preventDefault();
+            e.stopPropagation();
+
+            const id = $(this).attr('data-id');
+            console.log("id-----------", id)
+            const name = $('#name').val();
+            console.log("name----------", name)
+            let formData = new FormData();
+            formData.append('id', id);
+            console.log("id-----------", id)
+            formData.append('name', name);
+            console.log("name----------", name)
+
+            $.ajax({
+                type:"POST",
+                url: update_category,
+                headers: {
+                    "X-CSRFToken": getCookie("csrftoken")
+                },
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    alert('Update successfully!');
+                    window.location.href = '/posts/list-posts';
+                },
+                error: function(err) {
+                    console.log("err", err)
+                }
+            });
+        });
+    </script>
+{% endblock content %}
+    

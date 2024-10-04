@@ -1,7 +1,7 @@
 
 {% extends "layouts/index.html" %}
 {% block title %}
-  Edit Post | {{ block.super }}
+  Edit-Post 
 {% endblock title %}
 {% block content %}
   <h4><small>Edit Post</small></h4>
@@ -22,6 +22,12 @@
         </div>
 
         <div class="mb-3">
+          <label for="content">Ingredient
+             <span style="color: red">*</span>:</label>
+          <textarea class="form-control" id="ingredient" name="ingredient" rows="5" required>{{ object.ingredient }}</textarea>
+        </div>
+
+        <div class="mb-3">
           <label for="content">Price <span style="color: red">*</span>:</label>
           <input class="form-control" id="price" name="price" required value="{{object.price }}">
         </div>
@@ -39,6 +45,16 @@
           <input type="file" class="form-control" id="image" name="image">
         </div>
 
+        <div class="mb-3">
+          <label for="category">Category:</label>
+          <select name="category" id="category" required>
+            <option value="">{{ object.category }}</option>
+            {% for category in categories %}
+              <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        
         <button class="btn btn-primary" id="submit_update_post" data-id="{{object.pk}}" type="button">Update Post</button>
       </form>
     </div>
@@ -53,6 +69,8 @@
     const id_post = $(this).attr('data-id')
     const name = $('#name').val();
     const content = $('#content').val();
+    const ingredient = $('#ingredient').val();
+    const category = $('select#category option').filter(":selected").val();
     const price = $('#price').val();
     const image = $('#image')[0].files[0];
     let formData = new FormData();
@@ -60,6 +78,8 @@
     formData.append('name', name);
     formData.append('price', price);
     formData.append('content', content);
+    formData.append('ingredient', ingredient);
+    formData.append('category', category);
     
     if (image) {
       formData.append('image', image);  // Append the image file if available
