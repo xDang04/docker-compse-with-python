@@ -1,0 +1,48 @@
+{% extends 'admin/dashboard/index.html' %}
+{% load static %}
+{% block content %}
+    <div class="card">
+    <div class="card-body">
+      <form id="create-cate-form" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="mb-3">                    
+          <label for="name">Name <span style="color: red">*</span>:</label>
+          <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+
+        <button class="submit_create_category btn btn-primary" id="submit_create_category" type="button">Create Category</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    $('.submit_create_category').click(function(e){
+        e.preventDefault();
+        const name = $('#name').val();
+        console.log('assssssssssdsad', name)
+        let formData = new FormData();
+        formData.append('name',name)
+
+        $.ajax({
+            type : "POST",
+            url : "{% url 'api:api-create-category' %}",
+            data: formData,
+            headers:{
+              "X-CSRFToken": getCookie("csrftoken")  
+            },
+            contentType:false,  
+            processData:false,
+            success: function(response) {        
+                window.location.href= '/posts/admin/list-category/';
+                alert('Post created successfully!');
+            },
+            error: function(xhr, status, error) {
+                console.error('Error creating post:', error);
+                alert('Failed to create post. Please check the input data and try again.');
+            }
+        });
+    });
+  </script>
+{% endblock content %}
+    

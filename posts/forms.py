@@ -7,7 +7,11 @@ class CreatePostForm(forms.ModelForm):
   class Meta:
     model = Post
     fields = ['id_post', 'name', 'content', 'image']
-    
+  
+class CreateCategoryForm(forms.ModelForm):
+  class Meta:
+    model = Category
+    fields = ['name']
 class CartItemForm(forms.ModelForm):
   class Meta:
     model = CartItem
@@ -45,5 +49,10 @@ class CustomerLoginForm(forms.Form):
     username = forms.CharField(max_length=150)
     password = forms.CharField(widget=forms.PasswordInput)
     
-# class SearchForm(forms.Form):
-#   query = forms.CharField(label='Search Keywords', max_length=100)
+class CommentForm(forms.ModelForm):
+  class Meta:
+    model = Comment
+    fields = ['content']
+    widgets = {
+      'content': forms.Textarea(attrs={'rows': 4 , 'cols': 90}),
+    }

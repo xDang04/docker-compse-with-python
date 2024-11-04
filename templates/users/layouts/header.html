@@ -1,0 +1,150 @@
+{% load static %}
+    <header>
+    <div class="container py-2">
+      <div class="row py-4 pb-0 pb-sm-4 align-items-center ">
+
+        <div class="col-sm-4 col-lg-3 text-center text-sm-start">
+          <div class="main-logo">
+              
+              <img src="{% static 'images/logo.png' %}" alt="Error">
+          </div>
+        </div>
+
+        <div class="col-sm-6 offset-sm-2 offset-md-0 col-lg-5 d-none d-lg-block">
+          <div class="search-bar border rounded-2 px-3 border-dark-subtle">
+            <form id="search-form" class="text-center d-flex align-items-center" action="{% url 'posts:search_post' %}" 
+            method="get">
+              {% csrf_token %}
+              <input type="text" class="form-control border-0 bg-transparent" id="search exampleInputPassword1"
+                placeholder="Search ...." name="query" />
+              
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path fill="currentColor"
+                  d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7a7 7 0 0 1-7 7Z" />
+              </svg>
+            </form>
+            
+          </div>
+        </div>
+
+        <div
+          class="contact col-sm col-lg d-flex justify-content-end gap-3 align-items-center mt-4 mt-sm-0 justify-content-center justify-content-sm-end">
+          
+          <div class="support-box text-end d-none d-xl-block">
+            <span class="fs-6 secondary-font text-muted fw-bolder">
+              <a class="aheader" href="{% url 'posts:default_room' %}">Contact</a>
+            </span>
+          </div>
+
+          <div class="support-box text-end d-none d-xl-block">
+            <span class="fs-6 secondary-font text-muted fw-bolder">
+              <a class="aheader" href="{% url 'posts:introduction' %}">Introduction</a>
+            </span>
+            
+          </div>
+
+          <!-- <div class="support-box text-end d-none d-xl-block">
+            <span class="fs-6 secondary-font text-muted fw-bolder">
+              {% if user.is_authenticated %}
+                    Hi, {{ user.username }}!
+                {% endif %}
+            </span>
+          </div> -->
+          <div class="support-box text-end d-none d-xl-block">
+            
+
+            <!-- Dropdown menu -->
+            <div class="dropdown d-inline-block">
+              <button class="btn btn-default dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                  <span class="fs-6 secondary-font text-muted fw-bolder">
+                      {% if user.is_authenticated %}
+                          Hi, {{ user.username }}!
+                      {% else %}
+                          Đăng nhập
+                      {% endif %}
+                  </span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                  {% if user.is_authenticated %}
+                      <li>
+                          <a class="dropdown-item" href="{% url 'posts:logout' %}">Đăng xuất</a>
+                      </li>
+                  {% else %}
+                      <li>
+                          <a class="dropdown-item" href="{% url 'posts:login' %}">Đăng nhập</a>
+                      </li>
+                  {% endif %}
+              </ul>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <hr class="m-0">
+    </div>
+
+    <div class="container">
+      <nav class="main-menu d-flex navbar navbar-expand-lg ">
+
+        
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+
+         
+
+          <div class="offcanvas-body justify-content-between">
+            
+
+            <ul class="navbar-nav menu-list list-unstyled d-flex gap-md-3 mb-0">
+              <li class="nav-item">
+                <a href="{% url 'posts:list-posts' %}" class="nav-link active">Store</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" role="button" id="pages" data-bs-toggle="dropdown"
+                  aria-expanded="false">Pages</a>
+                
+              </li>
+              <li class="nav-item">
+                <a href="index.html" class="nav-link">Shop</a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'posts:order_latest' %}" class="nav-link">Order</a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'posts:default_room' %}" class="nav-link">Contact</a>
+              </li>
+              <li class="nav-item">
+              </li>
+            </ul>
+
+            <div class="d-none d-lg-flex align-items-end">
+              <ul class="d-flex justify-content-end list-unstyled m-0">
+                <!-- <li>
+                  <a href="index.html" class="mx-3">
+                    <iconify-icon icon="healthicons:person" class="fs-4"></iconify-icon>
+                  </a>
+                </li> -->
+                <li>
+                  <a href="index.html" class="mx-3">
+                    <iconify-icon icon="mdi:heart" class="fs-4"></iconify-icon>
+                  </a>
+                </li>
+
+                <li class="">
+                  <a href="{% url 'posts:list_cart' %}"  class="mx-3" >
+                    <iconify-icon icon="mdi:cart" class="fs-4 position-relative"></iconify-icon>
+                    
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+    

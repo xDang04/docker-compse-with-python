@@ -1,49 +1,98 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8"/>
-    <title>Chat Room</title>
-</head>
-<body>
-    <textarea id="chat-log" cols="100" rows="20"></textarea><br>
-    <input id="chat-message-input" type="text" size="100"><br>
-    <input id="chat-message-submit" type="button" value="Send">
-    {{ room_name|json_script:"room-name" }}
-    <script>
-        const roomName = JSON.parse(document.getElementById('room-name').textContent);
+{% extends 'users/layouts/index.html' %}
 
-        const chatSocket = new WebSocket(
-            'ws://'
-            + window.location.host
-            + '/ws/chat/'
-            + roomName
-            + '/'
-        );
 
-        chatSocket.onmessage = function(e) {
-            const data = JSON.parse(e.data);
-            document.querySelector('#chat-log').value += (data.message + '\n');
-        };
+{% block title %}
+    Groups Chat
+{% endblock title %}
+    
 
-        chatSocket.onclose = function(e) {
-            console.error('Chat socket closed unexpectedly');
-        };
+{% block room %}
+    <h3 style="text-align:center">Hi, Welcome to {{ room_name }}</h3>
+        <div class="messenger" >
+            <div class="containerroom  pt-5 pe-5 ps-5" id="containerroom">
+                {% for message in messages %}
+                    {% if message.sender.lower == username.lower %}
+                        <div class="mymessage">
+                            <div class="message-content">{{message.message}}</div>
+                            <p class="message-timestamp-right"> {{message.time_stamp|date:"H:i"}}</p>
+                        </div>
+                    {% else %}
+                        <div class="messagesender">
+                            <div class="message-content">{{message.message}}</div>
+                            <p class="message-timestamp-left">{{message.sender}} {{message.time_stamp|date:"H:i"}}</p>
+                        </div>
+                    {% endif %} 
+                {% endfor %}
+            </div>
 
-        document.querySelector('#chat-message-input').focus();
-        document.querySelector('#chat-message-input').onkeyup = function(e) {
-            if (e.keyCode === 13) {  // enter, return
-                document.querySelector('#chat-message-submit').click();
-            }
-        };
+            <form action="" id="msg-form" method="post" class="forminput">
+                {% csrf_token %}
+                <input type="text" placeholder="Enter Your Message" id="message"
+                name="message" class="inputmessage form">
+                <button type="submit" class="buttonsend btn btn-primary me-3">Send</button>
+            </form>
+        </div>  
 
-        document.querySelector('#chat-message-submit').onclick = function(e) {
-            const messageInputDom = document.querySelector('#chat-message-input');
-            const message = messageInputDom.value;
-            chatSocket.send(JSON.stringify({
-                'message': message
-            }));
-            messageInputDom.value = '';
-        };
-    </script>
-</body>
-</html>
+       <script>
+            $(document).ready(function(){
+                const socketUrl = `ws://${window.location.host}/ws/messages/{{room_name}}/`;
+                console.log(socketUrl);
+                const socket = new WebSocket(socketUrl);
+
+                //Send message from to backend
+                $('#msg-form').on('submit', function(e){
+                    e.preventDefault();
+                    let message_sent = $('#message').val().trim();
+
+                    if (message_sent === "") {
+                         return;
+                    }
+                    socket.send(
+                        JSON.stringify({
+                            message: message_sent,
+                            room_name : "{{room_name}}",
+                            sender: "{{username}}",
+                        })
+                    );
+
+                    //delete content after send
+                    $("#message").val('');
+                });
+                const chat_divs = $('#containerroom');
+                const scrollToBottom = () => {
+                    chat_divs.scrollTop(chat_divs[0].scrollHeight);
+                };
+
+                // Receive message from backend
+                socket.addEventListener('message', (e) => {
+                    const data = JSON.parse(e.data)['message'];
+
+                    let sender = data['sender']
+                    let content = data['message']
+                    
+                    // show messages sent
+                    if(sender == "{{username}}"){
+                        chat_divs.append(
+                            `
+                            <div class="mymessage">
+                                <div class="message-content">${content}</div>
+                                <p class="message-timestamp-right">{{message.time_stamp|date:"H:i"}}</p>
+                            </div>
+                            `
+                        );
+                    }else{
+                        chat_divs.append(`
+                            <div class="sendermessage">
+                                <div class="message-content">${content}</div>
+                                <p class="message-timestamp-right">${sender}{{message.time_stamp|date:"H:i"}}</p>
+                            </div>
+                        `);
+                    }
+                    scrollToBottom();
+                });
+            });
+       </script>
+{% endblock room %}
+    
+    
+    

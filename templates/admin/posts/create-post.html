@@ -1,0 +1,97 @@
+{% extends "admin/dashboard/index.html" %}
+{% block title %}
+    Create-Post 
+{% endblock title %}
+{% block content %}
+  <h4><small>Create New Post</small></h4>
+  <hr>
+  <div class="card">
+    <div class="card-body">
+      <form id="create-post-form" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="mb-3">                    
+          <label for="name">Name <span style="color: red">*</span>:</label>
+          <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="price">Price <span style="color: red">*</span>:</label>
+          <input type="text" class="form-control" id="price" name="price" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="content">Content <span style="color: red">*</span>:</label>
+          <textarea class="form-control" id="content" name="content" rows="5" required></textarea>
+        </div>
+       
+        <div class="mb-3">
+          <label for="content">Ingredient
+             <span style="color: red">*</span>:</label>
+          <textarea class="form-control" id="ingredient" name="ingredient" rows="5" required></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="image">Image:</label>
+          <input type="file" class="form-control" id="image" name="image">
+        </div>
+
+        <div class="mb-3">
+          <label for="category">Category:</label>
+          <select name="category" id="category" required>
+            <option value="">-- Select a category --</option>
+            {% for category in categories %}
+              <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <button class="btn btn-primary" id="submit_create_post" type="button">Create Post</button>
+      </form>
+    </div>
+  </div>
+  <script>
+    
+    $('#submit_create_post').click(function(e) {
+      e.preventDefault();
+      const name = $('#name').val();
+      const content = $('#content').val();
+      const ingredient = $('#ingredient').val();
+      const price = $('#price').val();
+      const category = $('select#category option').filter(":selected").val();
+      const image = $('#image')[0].files[0];  // Lấy file ảnh nếu có
+      console.log('Selected category:', category);
+
+      let formData = new FormData();
+      formData.append('name', name);
+      formData.append('content', content);
+      formData.append('ingredient', ingredient);
+      formData.append('price', price);
+      formData.append('category', category);  // Thêm danh mục vào dữ liệu gửi đi
+
+      if (image) {
+        formData.append('image', image);  // Thêm ảnh nếu có
+      }
+      console.log('Form Data:', formData);
+
+      $.ajax({
+        type: "POST",
+        url: "{% url 'api:api-create-post' %}",  
+        data: formData,
+        headers: {
+          "X-CSRFToken": getCookie("csrftoken")
+        },
+        processData: false,
+        contentType: false,
+        success: function(response) {        
+          window.location.href= 'admin/posts/list-posts';
+          alert('Post created successfully!');
+        },
+        error: function(xhr, status, error) {
+          console.error('Error creating post:', error);
+          alert('Failed to create post. Please check the input data and try again.');
+        }
+      });
+    }); 
+  </script>
+{% endblock content %}

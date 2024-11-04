@@ -48,7 +48,7 @@ services:
   nginx-server:
     build: ./nginx
     container_name: "nginx_app"
-    image: nginx
+    image: nginx:1.27
     depends_on:
       - django_app
     volumes:

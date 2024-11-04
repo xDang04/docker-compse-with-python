@@ -1,0 +1,116 @@
+{% extends 'admin/dashboard/index.html' %}
+
+{% block title %}
+    List Categories
+{% endblock title %}
+ 
+ {% block content %}
+    <table class="table table-bordered-bd-black">
+        <thead>
+            <th>STT</th>
+            <th>Name</th>
+            <th colspan="2" style="text-align: center;">Action</th>
+        </thead>
+        <tbody>
+            {% for category in page_obj %}
+
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{ category.name }}</td>
+                    <td>
+                        <a class="submit_update btn btn-danger" id="update_category_{{category.pk}}" 
+                        href="{% url 'posts:update-category' category.pk %}">Update</a>
+
+                        
+                    </td>
+                    <td>
+                        <button class="submit_delete btn btn-danger" id="submit_delete" data-id="{{category.pk}}" class="">
+                            Delete Category
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+   </table>
+
+   <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <button>
+                    <a href="?page=1">&laquo; Đầu</a>
+                </button>
+                <button>
+                    <a href="?page={{ page_obj.previous_page_number }}">Trước</a>
+                </button>
+            {% endif %}
+
+            <span class="current">
+                Trang {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+                <button>
+                    <a href="?page={{ page_obj.next_page_number }}">Tiếp</a>
+                </button>
+                <button>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">Cuối &raquo;</a>
+                </button>
+            {% endif %}
+        </span>
+    </div>
+
+    <div id="confirm_modal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you want to delete this category ?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="confirm_change" class="btn btn-primary">Delete</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $('.submit_delete').click(function(e){
+            e.preventDefault();
+            const id = $(this).attr('data-id');
+            $('#confirm_change').attr('data-id', id)
+            $('#confirm_modal').modal('show');
+        });
+
+        $('#confirm_change').click(function(e){
+            const id_cate = $(this).attr('data-id');
+            console.log('idcatefsahbkaj',id_cate )
+            const data = {id : id_cate}
+
+            $.ajax({
+                type : "POST",
+                url : "{% url 'api:api-delete-category' %}",
+                headers: { 
+                        "X-CSRFToken": getCookie("csrftoken"),
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json' 
+                    },
+                'data':JSON.stringify(data),
+                success: function(response) {
+                    window.location.reload();
+                    alert('Delete successfully!');
+                },
+                error: function(err) {
+                    console.log("err", err)
+                }
+
+            })  
+        });
+    </script>
+ {% endblock content %}
+    

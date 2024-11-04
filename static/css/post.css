@@ -94,9 +94,6 @@
     margin-top: 20px;
 }
 
-.contactq{
-   
-}
 .formcontact{
    text-align: center;
 }
@@ -134,3 +131,9 @@
     color: black;
     font-weight: 400;
 }
+.cartitem{
+    align-content: center;
+    text-align: center;
+}
+
+

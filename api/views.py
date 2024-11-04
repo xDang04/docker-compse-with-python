@@ -102,6 +102,21 @@ def create_post(request):
         print("Error creating post:", e)
         return Response({"error": "Failed to create post. Please check the input data and try again."}, 
             status=status.HTTP_400_BAD_REQUEST)
+     
+@api_view(["POST"])
+def create_category(request):
+    try:
+        body = request.data
+        name = body.get('name')
+        print("namessssssssssssssssssssssssss", name)
+        category = Category(name=name)
+        category.save()
+        data = CategorySerializer(category).data
+        return Response(data, status=status.HTTP_201_CREATED)
+        
+    except Exception as e:
+        return Response({"error": "Failed to create post. Please check the input data and try again."}, 
+            status=status.HTTP_400_BAD_REQUEST)
         
 @api_view(["POST"])
 def delete_post(request):
@@ -116,11 +131,16 @@ def delete_post(request):
         return Response({"message": "Post deleted successfully."}, status=status.HTTP_200_OK)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-# @api_view(["POST"])
-# def detail_post(request):
-#     body = request.data
-#     id_instance = body.get('id')
-#     body.get('image')
-#     body.get('name')
-#     Post.object.filter(id = id_instance).first()
-    
+
+@api_view(["POST"])
+def delete_category(request):
+    try:
+        body = request.data
+        id = body.get('id')
+        category = Category.objects.filter(id=id).first()
+        if not category:
+            return Response({"error": "Post not found."}, status=status.HTTP_404_NOT_FOUND)    
+        category.delete()
+        return Response({"message": "Post deleted successfully."}, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

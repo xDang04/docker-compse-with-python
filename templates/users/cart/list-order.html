@@ -1,0 +1,73 @@
+{% extends "admin/dashboard/index.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>Danh sách đơn hàng</h2>
+    <table class="table table-bordered-bd-danger">
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>User Name</th>
+                <th>Order date</th>
+                <th>Address</th>
+                <th>Total</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in page_obj %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.user.username }}</td> <!-- Hiển thị tên người dùng -->
+                    <td>{{ order.order_date|date:"d-m-Y H:i" }}</td>
+                    <td>{{ order.address }}</td>
+                    <td>{{ order.total }} VNĐ</td>
+                    <td>
+                        <form method="POST" action="{% url 'posts:list-order' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="order_id" value="{{ order.id }}">
+                            <select name="status" class="form-select" onchange="this.form.submit()">
+                                
+                                <option value="Chờ xác nhận" {% if order.status == 'Chờ xác nhận' %}selected{% endif %}>Chờ xác nhận</option>
+                                <option value="Chờ giao hàng" {% if order.status == 'Chờ giao hàng' %}selected{% endif %}>Chờ giao hàng</option>
+                                <option value="Đang giao hàng" {% if order.status == 'Đang giao hàng' %}selected{% endif %}>Đang giao hàng</option>
+                                <option value="Đã giao hàng" {% if order.status == 'Đã giao hàng' %}selected{% endif %}>Đã giao hàng</option>
+                                <option value="Đã hủy" {% if order.status == 'Đã hủy' %}selected{% endif %}>Đã hủy</option>
+                            </select>
+                        </form>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6">No order.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <button>
+                    <a href="?page=1">&laquo; First</a>
+                </button>
+                <button>
+                    <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                </button>
+            {% endif %}
+
+            <span class="current">
+                Trang {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+                <button>
+                    <a href="?page={{ page_obj.next_page_number }}">Next</a>
+                </button>
+                <button>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+                </button>
+            {% endif %}
+        </span>
+    </div>
+</div>
+{% endblock content %}

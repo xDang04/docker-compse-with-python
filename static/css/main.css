@@ -87,14 +87,16 @@ input {
 }
 
 textarea {
-  outline: none;
-  border: none;
+  /* outline: none;
+  border: none; */
 }
 
 textarea:focus, input:focus {
   border-color: transparent !important;
 }
-
+a{
+  text-decoration: none;
+}
 input:focus::-webkit-input-placeholder { color:transparent; }
 input:focus:-moz-placeholder { color:transparent; }
 input:focus::-moz-placeholder { color:transparent; }
