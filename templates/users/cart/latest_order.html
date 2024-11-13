@@ -5,32 +5,64 @@
 {% endblock title %}
     
 {% block content %}
-    <a class="btn btn-danger mb-3" href="{% url 'posts:list-posts' %}">Continute Shopping</a>
-    <table class="table table-bordered border-success ">
-        <thead>
-            <tr>
-                <th>Status</th>
-                <th>Order Date</th>
-                <th>User Name</th>
-                <th>Phone</th>
-                <th>Address</th>
-                <th>Total</th>
-                <th>Email</th>
-            </tr>
-        </thead>
-        <tbody>
-            <h2>Danh sách đơn hàng của bạn</h2>
-            {% for order in orders %}
+    {% if orders %}
+        <a class="btn btn-danger mb-3" href="{% url 'posts:list-posts' %}">Continute Shopping</a>
+        <table class="table table-bordered border-success ">
+            <thead>
                 <tr>
-                    <td>{{ order.status }}</td>
-                    <td>{{ order.order_date }}</td>
-                    <td>{{ order.user.username }}</td>
-                    <td>{{ order.phone }}</td>
-                    <td>{{ order.address }}</td>
-                    <td>{{ order.total }} vnd</td>
-                    <td>{{ order.user.email }}</td>
+                    <th>Status</th>
+                    <th>Order Date</th>
+                    <th>User Name</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                    <th>Total</th>
+                    <th>Email</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <h2>Danh sách đơn hàng của bạn</h2>
+                {% for order in orders %}
+                    <tr>
+                        <td>{{ order.status }}</td>
+                        <td>{{ order.order_date }}</td>
+                        <td>{{ order.user.username }}</td>
+                        <td>{{ order.phone }}</td>
+                        <td>{{ order.address }}</td>
+                        <td>{{ order.total }} vnd</td>
+                        <td>{{ order.user.email }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <a class="btn btn-danger mb-3" href="{% url 'posts:list-posts' %}">Continute Shopping</a>
+        <table class="table table-bordered border-success ">
+            <thead>
+                <tr>
+                    <th>Status</th>
+                    <th>Order Date</th>
+                    <th>User Name</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                    <th>Total</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                <h2>Danh sách đơn hàng của bạn</h2>
+                {% for order in orders %}
+                    <tr>
+                        <td>{{ order.status }}</td>
+                        <td>{{ order.order_date }}</td>
+                        <td>{{ order.user.username }}</td>
+                        <td>{{ order.phone }}</td>
+                        <td>{{ order.address }}</td>
+                        <td>{{ order.total }} vnd</td>
+                        <td>{{ order.user.email }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+    
 {% endblock content %}

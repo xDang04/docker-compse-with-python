@@ -3,7 +3,7 @@
 {% block content %}
     <div class="card">
     <div class="card-body">
-      <form id="create-cate-form" enctype="multipart/form-data">
+      <form action="#" id="create-cate-form" enctype="multipart/form-data">
         {% csrf_token %}
 
         <div class="mb-3">                    
@@ -35,11 +35,11 @@
             processData:false,
             success: function(response) {        
                 window.location.href= '/posts/admin/list-category/';
-                alert('Post created successfully!');
+                alert('Category created successfully!');
             },
             error: function(xhr, status, error) {
                 console.error('Error creating post:', error);
-                alert('Failed to create post. Please check the input data and try again.');
+                alert('Failed to create category. Please check the input data and try again.');
             }
         });
     });

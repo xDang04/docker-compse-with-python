@@ -1,6 +1,9 @@
 {% extends 'users/layouts/index.html' %}
 
-
+{% block title %}
+    Checkout
+{% endblock title %}
+    
 
 {% block content %}
     <h3>Giỏ hàng của bạn</h3>
@@ -28,8 +31,9 @@
                 {% endfor %}
 
             </tbody>
+            
         </table>
-
+        <h6>Total : {{total|floatformat:3}} VND</h6>
     <a class="btn btn-danger mb-3" href="{% url 'posts:list_cart' %}">Quay lại</a>
     <form method="post">
     {% csrf_token %}

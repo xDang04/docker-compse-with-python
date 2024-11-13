@@ -1,44 +1,80 @@
 import json
-from channels.generic.websocket import AsyncJsonWebsocketConsumer
+from channels.generic.websocket import AsyncWebsocketConsumer
+from .models import ChatOneToOne, Message
 from channels.db import database_sync_to_async
-from .models import Room, Message
+from django.contrib.auth.models import User
+from django.db import models
+from datetime import datetime
 
-
-class chatConsumer(AsyncJsonWebsocketConsumer):
+@database_sync_to_async
+def get_username_by_id(sender_id):
+    try:
+        user = User.objects.get(id=sender_id)
+        return user.username  # Hoặc bạn có thể lấy tên người dùng khác nếu muốn
+    except User.DoesNotExist:
+        return None
+class ChatConsumer(AsyncWebsocketConsumer):
+   
     async def connect(self):
-        self.room_name = f"room_{self.scope['url_route']['kwargs']['room_name']}"
-        await self.channel_layer.group_add(self.room_name, self.channel_name)
+        # Dùng chat_id từ URL để xác định nhóm
+        self.chat_id = self.scope['url_route']['kwargs']['chat_id']
+        self.room_group_name = f'chat_{self.chat_id}'
+
+        # Thêm vào group để nhận tin nhắn
+        await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
         
-    async def disconnect(self, code):
-        await self.channel_layer.group_discard(self.room_name, self.channel_name)
-        self.close(code)
         
     async def receive(self, text_data):
-        data_json = json.loads(text_data)
-        event = {
-            "type" : "send_message",
-            "message" : data_json,
-        }
-        
-        await self.channel_layer.group_send(self.room_name, event)
-        
-    async def send_message(self, event):
-        data = event['message']
-        await self.create_message(data = data)
-        
-        response = {
-            "sender" : data["sender"],
-            "message" : data["message"],
-        }
-        await self.send(text_data = json.dumps({"message":response}))
-        
+        text_data_json = json.loads(text_data)
+        message_content = text_data_json['message']
+        sender_id = text_data_json['sender_id']
+
+        # Lấy tên người gửi
+        sender_username = await get_username_by_id(sender_id)
+
+        # Kiểm tra và lưu tin nhắn vào DB
+        chat = await self.get_chat()
+        if chat:
+            time_stamp = datetime.now().strftime('%H:%M')
+            await self.save_message(chat, sender_id, message_content,time_stamp)
+
+            # Gửi tin nhắn đến tất cả các thành viên trong nhóm
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'chat_message',
+                    'message': message_content,
+                    'sender_username': sender_username,
+                    'time_stamp': time_stamp
+                }
+            )
+
+    async def chat_message(self, event):
+        # Lấy message và sender từ event
+        message = event['message']
+        sender_username = event['sender_username']
+        time_stamp = event['time_stamp']
+        # Gửi tin nhắn tới WebSocket client
+        await self.send(text_data=json.dumps({
+            'message': message,
+            'sender_username': sender_username,
+            'time_stamp': time_stamp
+        }))
+    
     @database_sync_to_async
-    def create_message(self, data):
-        
-        get_room = Room.objects.get(room_name=data['room_name'])
-        
-        if not Message.objects.filter(message = data["message"], sender = data["sender"]).exists():
-            new_message = Message.objects.create(room = get_room, 
-            message = data["message"], sender = data["sender"])
-        # return new_message
+    def get_chat(self):
+        # Tìm cuộc trò chuyện dựa trên chat_id
+        try:
+            return ChatOneToOne.objects.get(id=self.chat_id)
+        except ChatOneToOne.DoesNotExist:
+            return None
+
+    @database_sync_to_async
+    def get_messages(self, chat):
+        return chat.messages.all()  # Lấy tất cả tin nhắn từ cuộc trò chuyện
+
+    @database_sync_to_async
+    def save_message(self, chat, sender_id, content,time_stamp):
+        sender = User.objects.get(id=sender_id)
+        Message.objects.create(chat=chat, sender=sender, content=content,time_stamp=time_stamp)

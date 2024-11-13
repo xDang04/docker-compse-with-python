@@ -9,26 +9,26 @@
     <table class="table table-bordered-bd-info">
         <thead>
             <tr>
-                <th>STT</th>
-                <th>NAME</th>
-                <th>IMAGE</th>
-                <th>PRICE</th>
-                <th colspan="2">ACTION</th>
+                <th class="du">STT</th>
+                <th class="du">NAME</th>
+                <th class="du">IMAGE</th>
+                <th class="du">PRICE</th>
+                <th class="du" colspan="2">ACTION</th>
             </tr>
         </thead>
         <tbody>
             {% for post in page_obj %}            
             <tr>
-                <td>{{forloop.counter}}</td>
+                <td class="du">{{forloop.counter}}</td>
                 <td>{{ post.name }}</td>
-                <td>
+                <td class="du">
                     <img class="img-list-admin" src="{{ post.image.url }}" alt="{{ post.name }}">
                 </td>
                 <td>{{ post.price | floatformat:3}} VNĐ</td>
-                <td>
+                <td class="du">
                     <a class="btn btn-danger" id="update_post_{{post.pk}}" href="{% url 'posts:update-post' post.pk %}">Update</a>
                 </td>
-                <td>
+                <td class="du">
                     <button class="submit_delete btn btn-danger" id="submit_delete" data-id="{{post.pk}}" class="">
                         Delete
                     </button>
@@ -73,7 +73,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>Are you want to delete this category ?</p>
+                <p>Are you want to delete this Post ?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" id="confirm_change" class="btn btn-primary">Delete</button>
@@ -92,13 +92,13 @@
         });
 
         $('#confirm_change').click(function(e){
-            const id_cate = $(this).attr('data-id');
-            console.log('idcatefsahbkaj',id_cate )
-            const data = {id : id_cate}
+            const id = $(this).attr('data-id');
+            console.log('idcatefsahbkaj',id )
+            const data = {id_post : id}
 
             $.ajax({
                 type : "POST",
-                url : "{% url 'api:api-delete-category' %}",
+                url : "{% url 'api:api-delete-post' %}",
                 headers: { 
                         "X-CSRFToken": getCookie("csrftoken"),
                         'Accept': 'application/json',

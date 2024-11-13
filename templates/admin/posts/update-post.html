@@ -13,31 +13,31 @@
         
         <div class="mb-3">                    
           <label for="name">Name <span style="color: red">*</span>:</label>
-          <input type="text" class="form-control" id="name" name="name" value="{{ object.name }}" required>
+          <input type="text" class="form-control" id="name" name="name" value="{{ post.name }}" required>
         </div>
 
         <div class="mb-3">
           <label for="content">Content <span style="color: red">*</span>:</label>
-          <textarea class="form-control" id="content" name="content" rows="5" required>{{ object.content }}</textarea>
+          <textarea class="form-control" id="content" name="content" rows="5" required>{{ post.content }}</textarea>
         </div>
 
         <div class="mb-3">
           <label for="content">Ingredient
              <span style="color: red">*</span>:</label>
-          <textarea class="form-control" id="ingredient" name="ingredient" rows="5" required>{{ object.ingredient }}</textarea>
+          <textarea class="form-control" id="ingredient" name="ingredient" rows="5" required>{{ post.ingredient }}</textarea>
         </div>
 
         <div class="mb-3">
           <label for="content">Price <span style="color: red">*</span>:</label>
-          <input class="form-control" id="price" name="price" required value="{{object.price }}">
+          <input class="form-control" id="price" name="price" required value="{{post.price }}">
         </div>
 
         <div class="mb-3">
           <label for="image">Image <span style="color: red">*</span>:</label>
-            {% if object.image %}
+            {% if post.image %}
 
               <div class="mb-2">
-                <img src="{{ object.image.url }}" alt="Current Image" class="img-fluid" style="max-width: 200px;">
+                <img src="{{ post.image.url }}" alt="Current Image" class="img-fluid" style="max-width: 200px;">
               </div>
 
             {% endif %}
@@ -48,14 +48,14 @@
         <div class="mb-3">
           <label for="category">Category:</label>
           <select name="category" id="category" required>
-            <option value="">{{ object.category }}</option>
+            <option value="">{{ post.category }}</option>
             {% for category in categories %}
               <option value="{{ category.id }}">{{ category.name }}</option>
             {% endfor %}
           </select>
         </div>
         
-        <button class="btn btn-primary" id="submit_update_post" data-id="{{object.pk}}" type="button">Update Post</button>
+        <button class="btn btn-primary" id="submit_update_post" data-id="{{post.pk}}" type="button">Update Post</button>
       </form>
     </div>
   </div>
@@ -96,7 +96,7 @@
       contentType: false,
       success: function(response) {
         alert('Update successfully!');
-        window.location.href = '/posts/list-posts';
+        window.location.href = '/posts/admin/list-posts';
       },
       error: function(err) {
         console.log("err", err)

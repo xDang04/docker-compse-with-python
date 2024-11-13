@@ -17,9 +17,10 @@ def update_post(request):
         # request.POST.get not input data
         body = request.data
         id_instance = body.get('id_post')
+        # print('dddddddddddddddddddddddd', id_instance)
         post = Post.objects.filter(id_post=id_instance).first()
         # Giữ giá trị cũ nếu không có dữ liệu mới
-        post.name = body.get('name', post.name)  
+        post.name = body.get('name', post.name)
         post.price = body.get('price', post.price)
         post.content = body.get('content', post.content)
         post.ingredient = body.get('ingredient', post.ingredient)
@@ -42,7 +43,6 @@ def update_post(request):
         print("Error creating post:", e)
         return Response({"error": "Failed to update post. Please check the input data and try again."},
             status=status.HTTP_400_BAD_REQUEST)
-        
         
 @api_view(["POST"])
 def update_category(request):
@@ -69,12 +69,7 @@ def update_category(request):
         print("Error updating category:", e)
         return Response({"error": "Failed to update category. Please check the input data and try again."},
                         status=status.HTTP_400_BAD_REQUEST)
-        
-# @api_view(['GET'])
-# def get_categories(request):
-#     categories = Category.objects.all()
-#     serializer = CategorySerializer(categories, many=True)
-#     return JsonResponse(serializer.data, safe=False)
+
 
 @api_view(["POST"])
 def create_post(request):
@@ -86,7 +81,7 @@ def create_post(request):
         price = body.get('price')
         ingredient = body.get('ingredient')
         category_id = body.get('category')
-        print("cccccccccccccccccc",category_id )
+        # print("cccccccccccccccccc",category_id )
         image = body.get('image')
         if not category_id or not category_id.isdigit():
             return Response({"error": "Invalid category ID."}, status=status.HTTP_400_BAD_REQUEST)
@@ -108,7 +103,7 @@ def create_category(request):
     try:
         body = request.data
         name = body.get('name')
-        print("namessssssssssssssssssssssssss", name)
+        # print("namessssssssssssssssssssssssss", name)
         category = Category(name=name)
         category.save()
         data = CategorySerializer(category).data
@@ -125,6 +120,7 @@ def delete_post(request):
         body = request.data
         id_instance = body.get('id_post')
         post = Post.objects.filter(id_post=id_instance).first()
+        print('idddddddddddddddddddd',id_instance )
         if not post:  # If the post does not exist
             return Response({"error": "Post not found."}, status=status.HTTP_404_NOT_FOUND)     
         post.delete()

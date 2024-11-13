@@ -8,13 +8,13 @@
 
 {% block content %}
     <div class="updatecategory">
-        <form action="#" method="POST" >
+        <form action="#" method="POST" class="ms-3">
             {% csrf_token %}
             <div class="updatecate">
                 <label for="name">Name: </label>
-                <input type="text" class="form-control" id="name" value="{{object.name}}">
+                <input type="text" class="form-control" id="name" value="{{category.name}}">
             </div>
-            <button type="button" class="btn btn-danger" data-id="{{object.id}}" id="updatecategory">Update</button>
+            <button type="button" class="btn btn-danger mt-3" data-id="{{category.pk}}" id="updatecategory">Update</button>
         </form>
     </div>
 
@@ -45,7 +45,7 @@
                 contentType: false,
                 success: function(response) {
                     alert('Update successfully!');
-                    window.location.href = 'admin/category/list-category';
+                    window.location.href = '/posts/admin/list-category';
                 },
                 error: function(err) {
                     console.log("err", err)

@@ -5,49 +5,104 @@
 {% endblock title %}
     
 {% block content %}
-    <div class="d-flex justify-content-between">
-        <h2>Giỏ hàng </h2>
-        <form action="{% url 'posts:delete_all_cart' %}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Delete_all_cart</button>
-        </form>
-    </div>
+    
+    {% if cart %}
+        <div class="d-flex justify-content-between">
+            <h2>Giỏ hàng </h2>
+            <form action="{% url 'posts:delete_all_cart' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete_all_cart</button>
+            </form>
+        </div>
 
-    <table class="table table-bordered" style="min-height: 200px;">
-        <thead>
-            <tr>
-                <th>STT</th>
-                <th>Name</th>
-                <th>Image</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Action</th>
-                <th>Total Price</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item, item_total in items %}
+        <table class="table table-bordered" style="min-height: 200px;">
+            <thead>
                 <tr>
-                    <td class="cartitem">{{ forloop.counter }}</td>
-                    <td class="cartitem">{{ item.post.name }}</td>
-                    <td class="cartitem">
-                        <img class="img-cart" src="{{ item.post.image.url }}" alt="{{ item.post.name }}">
-                    </td>
-                    <td class="cartitem">{{ item.post.price|floatformat:3 }} VNĐ</td>
-                    <td class="cartitem">{{ item.quantity }}</td>
-                    <td class="cartitem">
-                            <a href="{% url 'posts:delete_cart' item.pk %}" class="btn btn-danger">Xóa</a>
-                        </td>
-                    <td class="cartitem">{{ item_total|floatformat:3 }} VNĐ</td>  <!-- Hiển thị giá trị đã tính từ view -->
+                    <th>STT</th>
+                    <th>Name</th>
+                    <th>Image</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Action</th>
+                    <th>Total Price</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for item, item_total in items %}
+                    <tr>
+                        <td class="cartitem">{{ forloop.counter }}</td>
+                        <td class="cartitem">{{ item.post.name }}</td>
+                        <td class="cartitem">
+                            <img class="img-cart" src="{{ item.post.image.url }}" alt="{{ item.post.name }}">
+                        </td>
+                        <td class="cartitem">{{ item.post.price|floatformat:3 }} VNĐ</td>
+                        <td class="cartitem">{{ item.quantity }}</td>
+                        <td class="cartitem">
+                                <a href="{% url 'posts:delete_cart' item.pk %}" class="btn btn-danger">Xóa</a>
+                            </td>
+                        <td class="cartitem">{{ item_total|floatformat:3 }} VNĐ</td>  <!-- Hiển thị giá trị đã tính từ view -->
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-    <p style="text-align: right;" class="me-3"><strong>Total:</strong> {{ total_price|floatformat:3 }} VND</p>
+        <p style="text-align: right;" class="me-3"><strong>Total:</strong> {{ total_price|floatformat:3 }} VND</p>
 
-    <form class="float-end me-3" method="post" action="{% url 'posts:checkout' %}">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-primary">Place Order</button>
-    </form>
+        <form class="float-end me-3" method="post" action="{% url 'posts:checkout' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Place Order</button>
+        </form>
+    {% else %}
+        <!-- <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                alert("Giỏ hàng của bạn đang trống. Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.");
+            });
+        </script> -->
+        <div class="d-flex justify-content-between">
+            <h2>Giỏ hàng </h2>
+            <form action="#">
+               
+                <button type="" class="btn btn-danger">Delete_all_cart</button>
+            </form>
+        </div>
+
+        <table class="table table-bordered" style="min-height: 200px;">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Name</th>
+                    <th>Image</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Action</th>
+                    <th>Total Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item, item_total in items %}
+                    <tr>
+                        <td class="cartitem">{{ forloop.counter }}</td>
+                        <td class="cartitem">{{ item.post.name }}</td>
+                        <td class="cartitem">
+                            <img class="img-cart" src="{{ item.post.image.url }}" alt="{{ item.post.name }}">
+                        </td>
+                        <td class="cartitem">{{ item.post.price|floatformat:3 }} VNĐ</td>
+                        <td class="cartitem">{{ item.quantity }}</td>
+                        <td class="cartitem">
+                                <a href="{% url 'posts:delete_cart' item.pk %}" class="btn btn-danger">Xóa</a>
+                            </td>
+                        <td class="cartitem">{{ item_total|floatformat:3 }} VNĐ</td>  <!-- Hiển thị giá trị đã tính từ view -->
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <p style="text-align: right;" class="me-3"><strong>Total:</strong> {{ total_price|floatformat:3 }} VND</p>
+
+        <form class="float-end me-3"  action="#">
+            {% csrf_token %}
+            <button type="" class="btn btn-primary">Place Order</button>
+        </form>
+    {% endif %}
+        
 {% endblock %}

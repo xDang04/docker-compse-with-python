@@ -7,25 +7,25 @@
  {% block content %}
     <table class="table table-bordered-bd-black">
         <thead>
-            <th>STT</th>
-            <th>Name</th>
+            <th class="du">STT</th>
+            <th class="du">Name</th>
             <th colspan="2" style="text-align: center;">Action</th>
         </thead>
         <tbody>
             {% for category in page_obj %}
 
                 <tr>
-                    <td>{{forloop.counter}}</td>
+                    <td class="du">{{forloop.counter}}</td>
                     <td>{{ category.name }}</td>
-                    <td>
+                    <td class="du">
                         <a class="submit_update btn btn-danger" id="update_category_{{category.pk}}" 
                         href="{% url 'posts:update-category' category.pk %}">Update</a>
 
                         
                     </td>
-                    <td>
+                    <td class="du">
                         <button class="submit_delete btn btn-danger" id="submit_delete" data-id="{{category.pk}}" class="">
-                            Delete Category
+                            Delete
                         </button>
                     </td>
                 </tr>

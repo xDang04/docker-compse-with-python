@@ -37,11 +37,11 @@
         </div>
 
         <div class="mb-3">
-          <label for="category">Category:</label>
-          <select name="category" id="category" required>
-            <option value="">-- Select a category --</option>
+          <label for="category">Category:</label><br>
+          <select class="form-control" name="category" id="category" required>
+            <option  value="">-- Select a category --</option>
             {% for category in categories %}
-              <option value="{{ category.id }}">{{ category.name }}</option>
+              <option  value="{{ category.id }}">{{ category.name }}</option>
             {% endfor %}
           </select>
         </div>
@@ -84,7 +84,7 @@
         processData: false,
         contentType: false,
         success: function(response) {        
-          window.location.href= 'admin/posts/list-posts';
+          window.location.href= '/posts/admin/list-posts';
           alert('Post created successfully!');
         },
         error: function(xhr, status, error) {

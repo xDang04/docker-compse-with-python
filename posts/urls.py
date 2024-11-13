@@ -2,14 +2,6 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
 from .views import (
-    ListPostView,
-    ListCategoryView,
-    CreatePostView,
-    UpdatePostView,
-    DetailPostView,
-    UpdateCategory,
-    CreateCategoryView,
-    latest_order,
     HomeView,
     RoomView
     )
@@ -18,12 +10,17 @@ app_name = 'posts'
 
 urlpatterns = [
     # Home
-    path('list-posts/', ListPostView.as_view(), name='list-posts'),
-    path('detail-post/<int:pk>/', DetailPostView.as_view(), name='detail-post'),
+    path('', views.home, name='list-posts'),
+    path('detail-post/<int:pk>/', views.deltail_post, name='detail-post'),
     path('detail-post/<int:pk>/comment/', views.comment, name='comment'), # xem commennt
     path('search/', views.search_post, name='search_post'),
     path('introduction/', views.introduction, name="introduction"),
-    path('contact/', views.contact, name="contact"),
+    path('contact/', views.send_mail_contact, name="contact"),
+    path('notfound/', views.notfound, name="notfound"),
+    path('chat/<int:user_id>/', views.chat_view, name='chat'),
+    # path('usersendmail/', views.send_mail_contact, name="send_mail"),
+    
+    
     
     # User admin xem sửa xóa các sp, trạng thái
     path('admin/', views.dashboard, name='dashboard'),
@@ -32,21 +29,21 @@ urlpatterns = [
     
     # crud post admin
     path('admin/list-posts/', views.adminListPost, name='admin-list-posts'),
-    path('admin/update-post/<int:pk>/', UpdatePostView.as_view(), name='update-post'),
-    path('admin/create-post/', CreatePostView.as_view(), name='create-post'),
+    path('admin/update-post/<int:pk>/', views.update_post_view, name='update-post'),
+    path('admin/create-post/', views.create_post_view, name='create-post'),
     path('admin/delete-post/<int:pk>/', views.delete_post, name='delete-post'),
      
     # crud category admin
-    path('admin/list-category/', ListCategoryView.as_view(), name='list-category'),
-    path('admin/create-category/', CreateCategoryView.as_view(), name='create-category'),
-    path('admin/update-category/<int:pk>/', UpdateCategory.as_view(), name="update-category"),
-    
+    path('admin/list-category/', views.list_category, name='list-category'),
+    path('admin/create-category/',views.create_category_view, name='create-category'),
+    path('admin/update-category/<int:pk>/', views.update_category_view, name="update-category"),
+        
     # Cart   
     path('list-cart/', views.list_cart, name='list_cart'),  
     path('delete_cart/<int:item_id>/', views.delete_cart, name='delete_cart'),
     path('add_to_cart/<int:pk>/', views.add_to_cart, name='add_to_cart'),
     path('delete_all_cart/', views.delete_all_cart ,name='delete_all_cart'),
-    path('latest-order/', latest_order, name='order_latest'), #user xem đơn hang của họ
+    path('latest-order/', views.latest_order, name='order_latest'), #user xem đơn hang của họ
     path('checkout/', views.checkout, name='checkout'),
     
     # auth
