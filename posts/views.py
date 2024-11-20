@@ -287,42 +287,42 @@ def profile_update(request):
         'image_user': image_user
     })
 
-@login_required
-def checkout(request):
-    cart = Cart.objects.filter(user=request.user).first()
-    if not cart or not cart.items.exists():
-        messages.error(request, "Giỏ hàng của bạn đang trống!")
-        return redirect('posts:checkout')
+# @login_required
+# def checkout(request):
+#     cart = Cart.objects.filter(user=request.user).first()
+#     if not cart or not cart.items.exists():
+#         messages.error(request, "Giỏ hàng của bạn đang trống!")
+#         return redirect('posts:checkout')
 
-    total = sum(item.quantity * item.post.price for item in cart.items.all())
+#     total = sum(item.quantity * item.post.price for item in cart.items.all())
     
-    if request.method == 'POST':
-        address = request.POST.get('address')  
-        phone = request.POST.get('phone')
+#     if request.method == 'POST':
+#         address = request.POST.get('address')  
+#         phone = request.POST.get('phone')
 
-        if not address:  
-            messages.error(request, "Địa chỉ không được để trống!")
-            return redirect('posts:checkout')
+#         if not address:  
+#             messages.error(request, "Địa chỉ không được để trống!")
+#             return redirect('posts:checkout')
 
         
-        order = Order.objects.create(
-            user=request.user,
-            address=address,
-            phone=phone,
-            total=total,
-            status='Chờ xác nhận'
-        )
+#         order = Order.objects.create(
+#             user=request.user,
+#             address=address,
+#             phone=phone,
+#             total=total,
+#             status='Chờ xác nhận'
+#         )
         
-        cart.items.all().delete()
-        cart.delete()
-        messages.success(request, "Đơn hàng của bạn đã được xác nhận!")
-        return redirect('posts:order_latest') 
+#         cart.items.all().delete()
+#         cart.delete()
+#         # messages.success(request, "Đơn hàng của bạn đã được xác nhận!")
+#         return redirect('posts:order_latest') 
 
-    context = {
-        'cart': cart,
-        'total': total,
-    }
-    return render(request, 'users/cart/checkout.html', context)
+#     context = {
+#         'cart': cart,
+#         'total': total,
+#     }
+#     return render(request, 'users/cart/checkout.html', context)
   
 def delete_all_cart(request):
     if request.method == 'POST':
@@ -510,12 +510,14 @@ def chatadmin(request,):
     return render(request, 'chat/chatwithuser.html',context)
 
 def index(request):
-    return render(request, "vnpay/index.html", {"title": "Danh sách demo"})
+    return render(request, "index.html", {"title": "Danh sách demo"})
+
 
 def hmacsha512(key, data):
     byteKey = key.encode('utf-8')
     byteData = data.encode('utf-8')
     return hmac.new(byteKey, byteData, hashlib.sha512).hexdigest()
+
 
 def payment(request):
 
@@ -560,6 +562,7 @@ def payment(request):
     else:
         return render(request, "vnpay/payment.html", {"title": "Thanh toán"})
 
+
 def payment_ipn(request):
     inputData = request.GET
     if inputData:
@@ -574,15 +577,6 @@ def payment_ipn(request):
         vnp_PayDate = inputData['vnp_PayDate']
         vnp_BankCode = inputData['vnp_BankCode']
         vnp_CardType = inputData['vnp_CardType']
-        
-        payment = Payment_VNPAY.objects.create(
-            order_id = order_id,
-            amount = amount,
-            order_desc = order_desc,
-            vnp_TransactionNo = vnp_TransactionNo,
-            vnp_ResponseCode = vnp_ResponseCode
-        )
-        
         if vnp.validate_response(settings.VNPAY_HASH_SECRET_KEY):
             # Check & Update Order Status in your Database
             # Your code here
@@ -611,6 +605,7 @@ def payment_ipn(request):
 
     return result
 
+
 def payment_return(request):
     inputData = request.GET
     if inputData:
@@ -625,37 +620,38 @@ def payment_return(request):
         vnp_PayDate = inputData['vnp_PayDate']
         vnp_BankCode = inputData['vnp_BankCode']
         vnp_CardType = inputData['vnp_CardType']
+        
+        payment = Payment_VNPAY.objects.create(
+            order_id = order_id,
+            amount = amount,
+            order_desc = order_desc,
+            vnp_TransactionNo = vnp_TransactionNo,
+            vnp_ResponseCode = vnp_ResponseCode
+        )
+        
         if vnp.validate_response(settings.VNPAY_HASH_SECRET_KEY):
             if vnp_ResponseCode == "00":
-                return render(request, 
-                                    "vnpay/payment_return.html", {
-                                    "title": "Kết quả thanh toán",
-                                    "result": "Thành công", "order_id": order_id,
-                                    "amount": amount,
-                                    "order_desc": order_desc,
-                                    "vnp_TransactionNo": vnp_TransactionNo,
-                                    "vnp_ResponseCode": vnp_ResponseCode
-                    })
+                return render(request, "vnpay/payment_return.html", {"title": "Kết quả thanh toán",
+                                                               "result": "Thành công", "order_id": order_id,
+                                                               "amount": amount,
+                                                               "order_desc": order_desc,
+                                                               "vnp_TransactionNo": vnp_TransactionNo,
+                                                               "vnp_ResponseCode": vnp_ResponseCode})
             else:
-                return render(request, 
-                                "vnpay/payment_return.html", {
-                                "title": "Kết quả thanh toán",
-                                "result": "Lỗi", "order_id": order_id,
-                                "amount": amount,
-                                "order_desc": order_desc,
-                                "vnp_TransactionNo": vnp_TransactionNo,
-                                "vnp_ResponseCode": vnp_ResponseCode
-                                })
+                return render(request, "vnpay/payment_return.html", {"title": "Kết quả thanh toán",
+                                                               "result": "Lỗi", "order_id": order_id,
+                                                               "amount": amount,
+                                                               "order_desc": order_desc,
+                                                               "vnp_TransactionNo": vnp_TransactionNo,
+                                                               "vnp_ResponseCode": vnp_ResponseCode})
         else:
             return render(request, "vnpay/payment_return.html",
                           {"title": "Kết quả thanh toán", "result": "Lỗi", "order_id": order_id, "amount": amount,
                            "order_desc": order_desc, "vnp_TransactionNo": vnp_TransactionNo,
                            "vnp_ResponseCode": vnp_ResponseCode, "msg": "Sai checksum"})
     else:
-        return render(request, "vnpay/payment_return.html", {
-            "title": "Kết quả thanh toán", 
-            "result": ""
-        })
+        return render(request, "vnpay/payment_return.html", {"title": "Kết quả thanh toán", "result": ""})
+
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -673,9 +669,7 @@ while len(n_str) < 12:
 
 def query(request):
     if request.method == 'GET':
-        return render(request, "vnpay/query.html", {
-            "title": "Kiểm tra kết quả giao dịch"
-        })
+        return render(request, "vnpay/query.html", {"title": "Kiểm tra kết quả giao dịch"})
 
     url = settings.VNPAY_API_URL
     secret_key = settings.VNPAY_HASH_SECRET_KEY
@@ -720,16 +714,11 @@ def query(request):
     else:
         response_json = {"error": f"Request failed with status code: {response.status_code}"}
 
-    return render(request, "vnpay/query.html", {
-        "title": "Kiểm tra kết quả giao dịch", 
-        "response_json": response_json
-    })
+    return render(request, "vnpay/query.html", {"title": "Kiểm tra kết quả giao dịch", "response_json": response_json})
 
 def refund(request):
     if request.method == 'GET':
-        return render(request, "vnpay/refund.html", {
-            "title": "Hoàn tiền giao dịch"
-        })
+        return render(request, "vnpay/refund.html", {"title": "Hoàn tiền giao dịch"})
 
     url = settings.VNPAY_API_URL
     secret_key = settings.VNPAY_HASH_SECRET_KEY
@@ -779,10 +768,6 @@ def refund(request):
     if response.status_code == 200:
         response_json = json.loads(response.text)
     else:
-        response_json = {"error": 
-            f"Request failed with status code: {response.status_code}"}
+        response_json = {"error": f"Request failed with status code: {response.status_code}"}
 
-    return render(request, "vnpay/refund.html", {
-        "title": "Kết quả hoàn tiền giao dịch", 
-        "response_json": response_json
-        })
+    return render(request, "vnpay/refund.html", {"title": "Kết quả hoàn tiền giao dịch", "response_json": response_json})

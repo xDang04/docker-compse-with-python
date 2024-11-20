@@ -48,9 +48,14 @@
 
         <p style="text-align: right;" class="me-3"><strong>Total:</strong> {{ total_price|floatformat:3 }} VND</p>
 
-        <form class="float-end me-3" method="post" action="{% url 'posts:checkout' %}">
+        <form class="float-end me-3" method="post" action="{% url 'payment' %}">
             {% csrf_token %}
             <button type="submit" class="btn btn-primary">Place Order</button>
+        </form>
+        <form action="" method="post">
+            <button type="button" class="btn btn-primary">
+                <a style="color: aliceblue;" href="{% url 'payment' %}">Thanh toán qua VNPAY</a>
+            </button>
         </form>
     {% else %}
         <!-- <script>

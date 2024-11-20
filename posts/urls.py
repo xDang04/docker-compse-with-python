@@ -45,7 +45,7 @@ urlpatterns = [
     path('add_to_cart/<int:pk>/', views.add_to_cart, name='add_to_cart'),
     path('delete_all_cart/', views.delete_all_cart ,name='delete_all_cart'),
     path('latest-order/', views.latest_order, name='order_latest'), #user xem đơn hang của họ
-    path('checkout/', views.checkout, name='checkout'),
+    # path('checkout/', views.checkout, name='checkout'),
     
     # auth
     # path('logout/', auth_views.LogoutView.as_view(), name='logout'),

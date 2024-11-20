@@ -66,7 +66,7 @@ class Order(models.Model):
    
    
 class Payment_VNPAY(models.Model):
-    order_id = models.IntegerField(default=0, blank=True, null=True) 
+    order_id = models.BigIntegerField(default=0, blank=True, null=True) 
     amount = models.FloatField(default=0.0, blank=True, null=True)
     order_desc = models.CharField(max_length=200, blank=True, null=True)
     vnp_TransactionNo = models.CharField(max_length=200, null=True, blank=True)
