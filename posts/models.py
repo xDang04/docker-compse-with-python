@@ -28,14 +28,12 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('posts:list-posts', kwargs={})
     
-
 class Cart(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'Cart for {self.user.username}'
-    
     
 class CartItem(models.Model):
     # user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -46,7 +44,6 @@ class CartItem(models.Model):
     
     def __str__(self):
         return f'{self.quantity} of {self.post.name}'
-
 
 class Order(models.Model):
     STATUS_CHOICES = [
@@ -66,7 +63,14 @@ class Order(models.Model):
     
     def __str__(self):
         return f'Order {self.id} - {self.status}'
-    
+   
+   
+class Payment_VNPAY(models.Model):
+    order_id = models.IntegerField(default=0, blank=True, null=True) 
+    amount = models.FloatField(default=0.0, blank=True, null=True)
+    order_desc = models.CharField(max_length=200, blank=True, null=True)
+    vnp_TransactionNo = models.CharField(max_length=200, null=True, blank=True)
+    vnp_ResponseCode = models.CharField(max_length=200, null=True, blank=True)
 # class Room(models.Model):
 #     room_name = models.CharField(max_length=50)
     
@@ -96,6 +100,14 @@ class Comment(models.Model):
     def __str__(self):
         return f"comment by {self.user.username} on {self.post.name}"
    
+class UserImage(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profile_image = models.ImageField(upload_to='profile_images', blank=True, null=True)
+    phone = models.CharField(max_length=15,blank=True, null=True)
+    address = models.CharField(max_length=255, blank=True, null=True)
+    
+    def __str__(self):
+        return self.username
 class Role(models.Model):
     name = models.CharField(max_length=50, unique=True)  # Ví dụ: Admin, Editor, User
     description = models.TextField(blank=True, null=True)  # Mô tả vai trò

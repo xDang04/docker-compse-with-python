@@ -1,6 +1,10 @@
 {% extends 'users/layouts/index.html' %}
 {% load static %}
 
+{% block title %}
+    comment
+{% endblock title %}
+    
 {% block content %}
     <div class="container">
         <div class="row">
@@ -60,8 +64,8 @@
             <ul>
             {% for comment in comments %}
                 <li style="padding-bottom: 10px;">
-                <span>{{ comment.user.username }}: <p>{{ comment.content }}</p></span>
-                <small>Posted on {{ comment.created_at }}</small>
+                <span>{{ comment.user.username }} <br> <small>{{ comment.content }}</small></span><br>
+                <small>Posted on {{ comment.created_at }}</small><br>
                 </li>
             {% empty %}
                 <p>No comments yet.</p>

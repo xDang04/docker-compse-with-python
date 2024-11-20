@@ -1,5 +1,10 @@
 {% extends 'users/layouts/index.html' %}
 
+
+{% block title %}
+    Chat
+{% endblock title %}
+    
 {% load static %}
 {% block content %}
     <div class="page" id="page">
@@ -36,22 +41,17 @@
                             </div>
                             <div class="name">
                                 
-                                {% for message in messages %}
-
-                                    <span>{{message.sender}}</span>
-                                    
-                                {% endfor %}
-                                    
-                                <!-- <span class="status">online</span> -->
+                                Admin
+                                <span class="status">online</span>
                             </div>
                             <div class="actions more">
-                                <i class="zmdi zmdi-more-vert"></i>
+                                <img src="{% static 'images/icons/more_vert_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg' %}" alt="">
                             </div>
                             <div class="actions attachment">
-                                <i class="zmdi zmdi-attachment-alt"></i>
+                                <img src="{% static 'images/icons/video_call_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg' %}" alt="">
                             </div>
                             <div class="actions">
-                                <i class="zmdi zmdi-phone"></i>
+                                <img src="{% static 'images/icons/call_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg' %}" alt="">
                             </div>
                             </div>
                             <div class="conversation">
@@ -79,7 +79,7 @@
                                     </div>
 
                                     <input id="chat-message-input" class="input-msg" name="input" 
-                                    placeholder="Type a message" autocomplete="off"  autofocus>
+                                    placeholder="Enter your message" autocomplete="off"  autofocus>
                                     
                                     <div class="photo">
                                         <img style="padding:10px" src="{% static 'images/icons/add_a_photo_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg'%}" alt="">

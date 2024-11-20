@@ -67,11 +67,11 @@
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                   {% if user.is_authenticated %}
                       <li>
-                          <a class="dropdown-item" href="{% url 'posts:logout' %}">Đăng xuất</a>
+                          <a class="dropdown-item" href="{% url 'logout' %}">Đăng xuất</a>
                       </li>
                   {% else %}
                       <li>
-                          <a class="dropdown-item" href="{% url 'posts:login' %}">Đăng nhập</a>
+                          <a class="dropdown-item" href="{% url 'login' %}">Đăng nhập</a>
                       </li>
                   {% endif %}
               </ul>
@@ -105,10 +105,6 @@
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" role="button" id="pages" data-bs-toggle="dropdown"
                   aria-expanded="false">Pages</a>
-                
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">Shop</a>
               </li>
               <li class="nav-item">
                 <a href="{% url 'posts:order_latest' %}" class="nav-link">Order</a>
@@ -117,21 +113,24 @@
                 <a href="{% url 'posts:contact' %}" class="nav-link">Contact</a>
               </li>
               <li class="nav-item">
+                <a href="{% url 'posts:view_profile' %}" class="nav-link">Profile</a>
+              </li>
+              <li class="nav-item">
               </li>
             </ul>
 
             <div class="d-none d-lg-flex align-items-end">
               <ul class="d-flex justify-content-end list-unstyled m-0">
-                <!-- <li>
-                  <a href="index.html" class="mx-3">
+                <li>
+                  <a href="{% url 'posts:view_profile' %}" class="mx-3">
                     <iconify-icon icon="healthicons:person" class="fs-4"></iconify-icon>
                   </a>
-                </li> -->
-                <li>
+                </li>
+                <!-- <li>
                   <a href="#" class="mx-3">
                     <iconify-icon icon="mdi:heart" class="fs-4"></iconify-icon>
                   </a>
-                </li>
+                </li> -->
 
                 <li class="">
                   <a href="{% url 'posts:list_cart' %}"  class="mx-3" >

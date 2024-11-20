@@ -177,7 +177,6 @@ body {
   width: 70%;
   height: 100%;
   margin-left: 15%;
-  /* display: flex; */
   align-items: center;
   justify-content: center;
 }
@@ -229,7 +228,7 @@ body {
 
 .user-bar {
   height: 55px;
-  background: #005e54;
+  background: #80c8fb;
   color: #fff;
   padding: 0 8px;
   font-size: 24px;
@@ -302,7 +301,6 @@ body {
 /* Conversation */
 
 .conversation {
-  height: calc(100% - 12px);
   position: relative;
   background: #efe7dd url("https://cloud.githubusercontent.com/assets/398893/15136779/4e765036-1639-11e6-9201-67e728e86f39.jpg") repeat;
   z-index: 0;
@@ -325,11 +323,13 @@ body {
 
 .conversation .conversation-container {
   height: calc(100% - 68px);
+  min-height: 400px;
   box-shadow: inset 0 10px 10px -10px #000000;
   overflow-x: hidden;
   padding: 0 16px;
   margin-bottom: 5px;
 }
+
 
 .conversation .conversation-container:after {
   content: "";
@@ -529,7 +529,7 @@ body {
 }
 
 .conversation-compose .send .circle {
-  background: #008a7c;
+  background: #80c8fb;
   border-radius: 50%;
   color: #fff;
   position: relative;
@@ -569,6 +569,11 @@ body {
   .marvel-device .status-bar {
     display: none;
   }
+  .conversation{
+    min-height: 400px; /* Điều chỉnh độ cao tùy ý */
+    overflow-y: auto;
+    padding: 10px;
+}
 
   .screen-container {
     position: absolute;
@@ -584,4 +589,20 @@ body {
   .conversation .conversation-container {
     height: calc(100vh - 120px);
   }
+}
+
+.conversation-container {
+    max-height: 400px; /* Đặt chiều cao cố định cho khung chat */
+    overflow-y: auto; /* Hiển thị thanh cuộn nếu nội dung vượt quá chiều cao */
+    padding: 10px;
+}
+
+/* Tùy chọn cho thanh cuộn */
+.conversation-container::-webkit-scrollbar {
+    width: 5px;
+}
+
+.conversation-container::-webkit-scrollbar-thumb {
+    background-color: #bcbcbc;
+    border-radius: 5px;
 }

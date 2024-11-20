@@ -36,9 +36,9 @@
    <div class="pagination">
         <span class="step-links">
             {% if page_obj.has_previous %}
-                <button>
+                <button class="btn btn-outline-dark">
                     <a href="?page=1">&laquo; Đầu</a>
-                </button>
+                </button class="btn btn-outline-dark">
                 <button>
                     <a href="?page={{ page_obj.previous_page_number }}">Trước</a>
                 </button>
@@ -49,10 +49,10 @@
             </span>
 
             {% if page_obj.has_next %}
-                <button>
+                <button class="btn btn-outline-dark">
                     <a href="?page={{ page_obj.next_page_number }}">Tiếp</a>
-                </button>
-                <button>
+                </button >
+                <button class="btn btn-outline-dark">
                     <a href="?page={{ page_obj.paginator.num_pages }}">Cuối &raquo;</a>
                 </button>
             {% endif %}

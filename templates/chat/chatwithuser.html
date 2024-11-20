@@ -1,0 +1,68 @@
+{% extends 'admin/dashboard/index.html' %}
+{% load static %}
+
+
+{% block title %}
+    Chat
+{% endblock title %}
+    
+{% block content %}
+<style>
+    
+
+
+</style>   
+    <div class="chat">
+        <!-- header -->
+        <header class="formchatuser">
+            <i class="fa fa-user-plus"></i>
+            <span class="headline">Message</span>
+            <span class="profile">
+                {% if user.userimage.profile_image %}
+                    <!--user image -->
+                    <img class="profile" width="70px" height="70px" src="{{ user.userimage.profile_image.url }}">
+                {% else %}
+                    <!-- user no image -->
+                    <img class="profile" width="70px" height="70px"
+                        src="{% static 'images/default-avatar-icon-of-social-media-user-vector.jpg' %}">
+                {% endif %}
+            </span>
+            <span class="online"></span>
+        </header>
+
+        <!-- <div class="new-msg">
+            <i class="fa fa-edit">
+
+            </i><span class="msg-line">
+
+            </span>
+        </div> -->
+
+        <div class="form-msg">
+            {% for user in users %}
+                <div class="messages">
+                    <div class="msg online_list">
+                        <span class="one">
+                            {% if user.userimage.profile_image %}
+                                <!--user image -->
+                                <img class="one" width="70px" height="70px" src="{{ user.userimage.profile_image.url }}">
+                            {% else %}
+                                <!-- user no image -->
+                                <img class="one" width="70px" height="70px"
+                                    src="{% static 'images/default-avatar-icon-of-social-media-user-vector.jpg' %}">
+                            {% endif %}
+                        </span>
+                        <span class="block romantic"></span>
+                        <span class="time">11:21</span>
+                        <div class="text">
+                            <span class="name">
+                                <a href="{% url 'posts:chat' user.id %}">{{ user.username }}</a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>  
+
+{% endblock content %}

@@ -23,7 +23,7 @@ class CustomerRegisterForm(forms.ModelForm):
 
   class Meta:
     model = User
-    fields = ['username', 'email', 'password']
+    fields = ['username', 'first_name', 'last_name', 'email', 'password']
 
 
   def clean(self):
@@ -44,7 +44,14 @@ class CustomerRegisterForm(forms.ModelForm):
         user.save()  # Lưu người dùng
     return user
       
-      
+class UserFormProfile(forms.ModelForm):
+  class Meta:
+    model = User
+    fields = ['first_name', 'last_name']
+class ImageUserForm(forms.ModelForm):
+    class Meta:
+        model = UserImage
+        fields = ['phone', 'address', 'profile_image']
 class CustomerLoginForm(forms.Form):
     username = forms.CharField(max_length=150)
     password = forms.CharField(widget=forms.PasswordInput)
@@ -56,3 +63,12 @@ class CommentForm(forms.ModelForm):
     widgets = {
       'content': forms.Textarea(attrs={'rows': 4 , 'cols': 90}),
     }
+    
+class PaymentForm(forms.Form):
+
+    order_id = forms.CharField(max_length=250)
+    order_type = forms.CharField(max_length=20)
+    amount = forms.IntegerField()
+    order_desc = forms.CharField(max_length=100)
+    bank_code = forms.CharField(max_length=20, required=False)
+    language = forms.CharField(max_length=2)

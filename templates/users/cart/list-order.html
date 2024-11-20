@@ -47,10 +47,10 @@
     <div class="pagination">
         <span class="step-links">
             {% if page_obj.has_previous %}
-                <button>
+                <button class="btn btn-outline-dark">
                     <a href="?page=1">&laquo; First</a>
                 </button>
-                <button>
+                <button class="btn btn-outline-dark">
                     <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
                 </button>
             {% endif %}
@@ -60,10 +60,10 @@
             </span>
 
             {% if page_obj.has_next %}
-                <button>
+                <button class="btn btn-outline-dark">
                     <a href="?page={{ page_obj.next_page_number }}">Next</a>
                 </button>
-                <button>
+                <button class="btn btn-outline-dark">
                     <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
                 </button>
             {% endif %}

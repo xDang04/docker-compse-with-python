@@ -1,0 +1,131 @@
+.form-control:focus {
+    box-shadow: none;
+    border-color: #BA68C8
+}
+
+.profile-button {
+    background: rgb(99, 39, 120);
+    box-shadow: none;
+    border: none
+}
+
+.profile-button:hover {
+    background: #682773
+}
+
+.profile-button:focus {
+    background: #682773;
+    box-shadow: none
+}
+
+.profile-button:active {
+    background: #682773;
+    box-shadow: none
+}
+
+.back:hover {
+    color: #682773;
+    cursor: pointer
+}
+
+.labels {
+    font-size: 11px
+}
+
+.add-experience:hover {
+    background: #BA68C8;
+    color: #fff;
+    cursor: pointer;
+    border: solid 1px #BA68C8
+}
+#img-profile{
+    object-fit: contain;
+    object-fit: cover;
+}
+
+/* css list-users-chat */
+.chat{
+    width:80%;
+    height:455px;
+    margin:40px auto;
+    background:white;
+}
+.formchatuser{
+    width:100%;
+    height:80px;
+    background:#35323C;
+    line-height:50px;
+}
+.formchatuser .fa-user-plus{
+    color:#9692A4;
+    margin-left:15px;
+    font-size:23px;
+}
+
+.form-msg{
+    overflow-y: scroll;
+    min-height: 370px;
+    height: 370px;
+}
+.headline{
+    color:white;
+}
+
+.profile{
+    display:inline;
+    width:70px;
+    height:70px;
+    padding:5px;
+    float:right;
+    margin-right:11px;
+    border-radius:50%;
+    object-fit: contain;
+    object-fit: cover;
+}
+
+.new-msg{
+    width:100%;
+    height:55px;
+    font-size:18px;
+    line-height:55px;
+    background:#73A0FD;
+    color: #fff;
+    text-align: center;
+}
+
+.msg .one {
+    object-fit: contain;
+    object-fit: cover;
+    display:inline-block;
+    width:70px;
+    height:70px;
+    border-radius: 50px;
+    background:  linear-gradient(
+        rgba(0, 0, 255, 0.20), 
+        rgba(0, 0, 255, 0.20)
+    ),
+}
+
+.msg{ position:relative;
+    border-bottom: 1px solid rgba(0,0,0,.2);
+    padding: 5px;
+}
+.text{
+    display:inline-block;   
+}
+
+.name{
+    position:absolute;
+    top:22px;
+    line-height:12px;
+    margin-left:15px;
+    font-weight:600;
+    font-size:12.2px;
+}
+
+.time{
+    position:absolute;
+    font-size:9px;
+    top:6px;
+    right:10px;
+}

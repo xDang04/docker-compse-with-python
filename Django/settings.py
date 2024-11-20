@@ -126,10 +126,16 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-LOGOUT_REDIRECT_URL = '/posts/login/'
+LOGOUT_REDIRECT_URL = '/login/'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'hoda.g204@gmail.com'
 EMAIL_HOST_PASSWORD = 'vttb mrcr jpxn tmxi'
+
+VNPAY_RETURN_URL = 'http://localhost/payment_return'  # get from config
+VNPAY_PAYMENT_URL = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html'  # get from config
+VNPAY_API_URL = 'https://sandbox.vnpayment.vn/merchant_webapi/api/transaction'
+VNPAY_TMN_CODE = 'L86V10FV'  # Website ID in VNPAY System, get from config
+VNPAY_HASH_SECRET_KEY = 'UG0UNZZI4B5W1R0UMAAA4QBVU77GQN46'  # Secret key for create checksum,get from config

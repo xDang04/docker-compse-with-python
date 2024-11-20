@@ -1,5 +1,5 @@
 from django.urls import path
-from django.contrib.auth import views as auth_views
+
 from . import views
 from .views import (
     HomeView,
@@ -17,8 +17,9 @@ urlpatterns = [
     path('introduction/', views.introduction, name="introduction"),
     path('contact/', views.send_mail_contact, name="contact"),
     path('notfound/', views.notfound, name="notfound"),
-    path('chat/<int:user_id>/', views.chat_view, name='chat'),
-    # path('usersendmail/', views.send_mail_contact, name="send_mail"),
+    path('chat/chat-with-admin_id?=<int:user_id>/', views.chat_view, name='chat'),
+    path('profile_user/', views.profile_update, name="view_profile"),
+    path('chatadmin/', views.chatadmin, name="chatadmin"),
     
     
     
@@ -47,9 +48,9 @@ urlpatterns = [
     path('checkout/', views.checkout, name='checkout'),
     
     # auth
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    path('register/', views.register, name='register'),
-    path('login/', views.user_login, name='login'),
+    # path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    # path('register/', views.register, name='register'),
+    # path('login/', views.user_login, name='login'),
     
     # Chat room
     path('room/<str:room_name>/<str:username>/', RoomView, name="room"),

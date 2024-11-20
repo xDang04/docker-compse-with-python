@@ -57,8 +57,12 @@
             <input type="text" class="form-control" id="city" name="city" required>
         </div>
 
-        <button type="submit" class="btn btn-primary">Xác nhận thanh toán</button>
-    </form>
+        <button type="submit" class="btn btn-primary">Thanh toán khi nhận hàng</button>
+        
 
+    </form>
+    <button type="button" class="btn btn-primary">
+            <a style="color: aliceblue;" href="{% url 'payment' %}">Thanh toán qua VNPAY</a>
+        </button>
 {% endblock content %}
     
